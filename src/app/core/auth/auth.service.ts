@@ -41,7 +41,7 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password)
-      .then()
+      .then(a => this.getProfile())
       .catch(err =>
         this.messageService.sendMessage(err.message, 'error')
       );
