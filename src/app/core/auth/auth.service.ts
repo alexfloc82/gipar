@@ -5,21 +5,24 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as firebase from 'firebase/app';
 
-import {MessageService} from '../message/message.service';
+import { MessageService } from '../message/message.service';
 
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
+  userProfile: Observable<any>;
   user: Observable<firebase.User>;
   users: FirebaseListObservable<any>;
 
   constructor(
-        private firebaseAuth: AngularFireAuth, 
-        private db: AngularFireDatabase,
-        private router:Router,
-        private messageService: MessageService) {
+    private firebaseAuth: AngularFireAuth,
+    private db: AngularFireDatabase,
+    private router: Router,
+    private messageService: MessageService) {
     this.user = firebaseAuth.authState;
+    this.userProfile = new Observable(observer => observer.next(''))
+    this.getProfile();
     this.users = db.list('/users');
   }
 
@@ -28,8 +31,8 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
-        var user ={email:email, uid:value.uid, name:name, lastname:lastname, adsuser:adsuser, role:'Standard'};
-        this.users.push(user).then(a=> this.router.navigate(['/Home']))
+        var user = { email: email, uid: value.uid, name: name, lastname: lastname, adsuser: adsuser, role: 'Standard' };
+        this.users.push(user).then(a => this.router.navigate(['/Home']))
       })
       .catch(err => this.messageService.sendMessage(err.message, 'error'))
   }
@@ -38,8 +41,8 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password)
-      .then()
-      .catch(err => 
+      .then(a => this.getProfile())
+      .catch(err =>
         this.messageService.sendMessage(err.message, 'error')
       );
   }
@@ -48,6 +51,20 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signOut();
+  }
+
+  getProfile(){
+    this.user.subscribe(userAuth => {
+      this.db.list('/users', {
+        query: {
+          orderByChild: 'uid',
+          equalTo: userAuth.uid
+        }
+      }
+      ).subscribe(userProfile => {
+        this.userProfile = new Observable(observer => observer.next(userProfile[0]));
+      });
+    });
   }
 
 }

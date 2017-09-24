@@ -1,7 +1,7 @@
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 export class Proposal {
-	area: Area[];
+	area: Area;
 	estimates: Estimate[];
 	end: string;
 	endDate: NgbDateStruct;
@@ -76,10 +76,23 @@ export class Travel {
 export class Holidays {
 	id: string;
 	user: string;
-	from: Date;
-	to: Date;
+	type: string;
+	from: string;
+	to: string;
+	fromDate: NgbDateStruct;
+	toDate: NgbDateStruct;
 
-	constructor() { }
+	constructor(
+		date?: string,
+		ngbDate?: NgbDateStruct,
+
+	) {
+		this.user= '';
+		this.from = date;
+		this.to = date;
+		this.fromDate = ngbDate;
+		this.toDate = ngbDate;
+	}
 }
 
 export class User {

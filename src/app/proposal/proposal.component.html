@@ -6,7 +6,7 @@
     <h2 class="text-primary">In progress</h2>
     <div class="row p-1">
       <div class="col-md-4 mt-2" *ngFor="let proposal of inprogressProposals">
-        <div class="card">
+        <div *ngIf="proposal.$key"  class="card">
           <div class="card-header">
             {{proposal.id}}
           </div>
@@ -18,13 +18,9 @@
             <button class="btn btn-info is-pointer" >Show Status</button>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="row p-1">
-      <div class="col-md-4 mt-2">
-        <div class="card">
+        <div *ngIf="!proposal.$key" class="card">
           <div class="card-header">
-            Create New
+            Add New
           </div>
           <div class="card-block text-center">
             <div><span class="fa fa-file-text-o fa-5x btn-link is-pointer" (click)="gotoDetail('-')"></span></div>
@@ -34,8 +30,8 @@
     </div>
   </div>
   <div class="container-fluid m-3">
-    <h2 data-toggle="collapse" data-target="#closeCollapse" class="text-primary is-pointer">Closed</h2>
-    <div class="collapse" id="closeCollapse">
+    <h2   class="text-primary">Closed</h2>
+    <div>
       <div class="row p-1">
         <div class="col-md-4 mt-2" *ngFor="let proposal of closedProposals">
           <div class="card">
@@ -46,7 +42,7 @@
               <h4 class="card-title">{{proposal.title}}</h4>
               <p class="card-text">Starts: {{proposal.start | date:'dd/MM/yyyy'}}</p>
               <p class="card-text">Ends: {{proposal.end | date:'dd/MM/yyyy'}}</p>
-              <button class="btn btn-info" (click)="gotoDetail(proposal.$key)">Edit</button>
+              <button class="btn btn-info" (click)="gotoDetail(proposal.$key)">Show Status</button>
             </div>
           </div>
         </div>

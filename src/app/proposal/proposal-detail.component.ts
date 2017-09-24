@@ -10,8 +10,9 @@ import { FormGroup } from '@angular/forms';
 
 import { UtilsService } from '../core/utils/utils.service';
 import { MessageService } from '../core/message/message.service';
+import { AuthService } from '../core/auth/auth.service';
 
-import { User, Proposal, Travel, Timesheet } from '../shared/datamodel';
+import { User, Proposal, Travel, Timesheet, Area } from '../shared/datamodel';
 
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 
@@ -25,6 +26,7 @@ export class ProposalDetailComponent implements OnInit {
   loader = false; //to control loading
   proposal: FirebaseObjectObservable<any>; //To keep reference to database Object
   users: User[]; // list of elegible users
+  areas: { key: string, value: string }[] = [];
   selectedUser: User; // Curently selected user
   selectedResources: User[];
   form: Proposal; //form data
@@ -34,10 +36,12 @@ export class ProposalDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     public utils: UtilsService,
+    public authService: AuthService,
     public messageService: MessageService) {
 
     this.loader = true;
     this.db.list('/users').subscribe(a => this.users = a);
+    this.db.list('/areas').subscribe(areas => areas.forEach(area =>  this.areas.push({ key: area.$key, value: area.id })));
 
   }
 
@@ -48,6 +52,13 @@ export class ProposalDetailComponent implements OnInit {
         if (param.get('id') == '-') {
           let now = new Date().toISOString();
           this.form = new Proposal(now, this.utils.convertISOToNgbDate(now));
+          this.authService.userProfile.subscribe(user => 
+            {
+              this.form.area = user.area;
+              this.form.responsible = user.$key;
+              this.db.object('/users/'+ user.$key).subscribe(user => this.selectedUser = user);
+            }
+          );
           this.loader = false;
         }
         // Editing proposal

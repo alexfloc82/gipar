@@ -15,8 +15,8 @@
 </div>
 
 <div class="container p-3" *ngIf="(authService.user | async)">
-  <div class="row p-1">
-    <div class="col-lg-3 mt-3">
+  <div class="row p-1" >
+    <div class="col-lg-3 mt-3" *ngIf="(authService.userProfile|async)?.role == 'Admin'">
       <div class="card">
         <span (click)="gotoMenu('Proposal')" class="btn btn-info">
           <h1>Proposals</h1><span class="fa fa-file-text-o fa-5x fa-fw" aria-hidden="true"></span></span>
@@ -42,7 +42,7 @@
     </div>
   <!--</div>
   <div class="row p-1">-->
-    <div class="col-lg-3 mt-3">
+    <div class="col-lg-3 mt-3" *ngIf="(authService.userProfile|async)?.role == 'Admin'">
       <div class="card">
         <span (click)="gotoMenu('User')" class="btn btn-danger">
           <h1>Users</h1><span class="fa fa-user fa-5x" aria-hidden="true"></span></span>

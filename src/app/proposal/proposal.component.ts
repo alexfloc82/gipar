@@ -27,6 +27,7 @@ export class ProposalComponent implements OnInit {
       this.proposals = a;
       this.closedProposals = this.proposals.filter(proposal => proposal.closed);
       this.inprogressProposals = this.proposals.filter(proposal => !proposal.closed);
+      this.inprogressProposals.push({});
       this.loader=false;});
     }
 

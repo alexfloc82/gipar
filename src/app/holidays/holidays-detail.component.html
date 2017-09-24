@@ -1,0 +1,54 @@
+<div class="container text-center pt-5" *ngIf="loader">
+  <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
+</div>
+<div class="container p-3" *ngIf="!loader">
+  <div class="col-lg-11">
+    <div id="alert_notifications" class="panel panel-default hidden">
+      <div class="panel-heading">
+            <i class="glyphicon glyphicon-exclamation-sign"></i> Alert Notifications
+      </div>
+      <div id="notifications" class="panel-body">
+      </div>
+    </div>
+  </div>  
+  <div class="form-row mb-3">
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSubmit()"><span class="fa fa-save" aria-hidden="true"></span> Save</button>
+    <button class="btn btn-outline-warning my-2 my-sm-0" (click)="goBack()"><span class="fa fa-undo" aria-hidden="true"></span> Undo</button>
+    <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right" (click)="delete()" *ngIf="holiday"><span class="fa fa-trash" aria-hidden="true"></span> Delete</button>
+  </div>
+  <form >
+
+    <div class="row">
+      <div class="col-md-6">
+
+        <label>User</label>
+        <div class="form-group">
+          <input type="text" name="selectedUser" class="form-control" [ngbTypeahead]="usearch" [(ngModel)]="selectedUser" [inputFormatter]="uformatter"
+            [resultFormatter]="uformatter" (selectItem)="selectUser($event)" [readonly]="holiday? true: false">
+        </div>
+
+        <label>Time Off type</label>
+        <div class="form-group">
+          <select name="type" [(ngModel)]="form.type" class="form-control">
+            <option>Vacation</option>
+            <option>Sickness</option>
+            <option>Training</option>
+          </select>
+        </div>        
+      </div>
+      <div class="col-md-3">
+        <label>From</label>
+        <div class="form-group">
+          <ngb-datepicker #ds [(ngModel)]="form.fromDate" [startDate]="{year:form.fromDate.year, month:form.fromDate.month}" name="fromDate"></ngb-datepicker>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <label>To</label>
+        <div class="form-group">
+          <ngb-datepicker #df [(ngModel)]="form.toDate" [startDate]="{year:form.toDate.year, month:form.toDate.month}"
+            name="toDate"></ngb-datepicker>
+        </div>
+      </div>
+    </div>
+  </form>          
+</div>

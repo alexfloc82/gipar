@@ -11,7 +11,7 @@
         <a routerLink="Home" class="nav-link" routerLinkActive="active">Home</a>
       </li>
       <li class="nav-item">
-        <a routerLink="Proposal" class="nav-link" routerLinkActive="active">Proposals</a>
+        <a routerLink="Proposal" class="nav-link" routerLinkActive="active" *ngIf="(authService.userProfile|async)?.role == 'Admin'">Proposals</a>
       </li>
       <li class="nav-item">
         <a routerLink="Timesheet" class="nav-link" routerLinkActive="active">Timesheets</a>
@@ -23,7 +23,7 @@
         <a routerLink="Travel" class="nav-link" routerLinkActive="active">Travels</a>
       </li>
       <li class="nav-item">
-        <a routerLink="User" class="nav-link" routerLinkActive="active">Users</a>
+        <a routerLink="User" class="nav-link" routerLinkActive="active" *ngIf="(authService.userProfile|async)?.role == 'Admin'">Users</a>
       </li>
     </ul>
     <div class="form-inline my-2 my-lg-0">
