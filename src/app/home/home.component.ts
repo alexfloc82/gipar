@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
   }
 
   resetPassword(){
-    
+    this.router.navigate(['user/Forgot']);
   }
 
 }

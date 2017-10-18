@@ -11,7 +11,7 @@ export class UtilsService {
 
   convertISOToNgbDate(isodate:string){ 
     var date = new Date(isodate);
-    return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDay()};
+    return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getUTCDate()};
   }
 
   comparefechas(dia1,mes1,year1,dia2,mes2,year2)
