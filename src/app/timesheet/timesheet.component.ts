@@ -8,19 +8,6 @@ import { Timesheet, User, Proposal } from '../shared/datamodel';
 
 @Component({
   selector: 'app-timesheet',
-  /*template: `<div>
-    <p>Today is {{((today | date: 'M')-1)}}</p>
-    <p>Or if you prefer, {{today | date:'fullDate'}}</p>
-    <p>The time is {{today | date:'jmZ'}}</p>
-  </div>`,*/
-  /*template: `
-  <h2>Meses</h2>
-    <ul>
-      <li *ngFor="let mes of meses">
-        <span>{{mes.id}}</span> {{mes.name}}
-      </li>
-    </ul>
-    `,*/
   templateUrl: './timesheet.component.html',
   styleUrls: ['./timesheet.component.css'],
   providers: []
@@ -28,66 +15,63 @@ import { Timesheet, User, Proposal } from '../shared/datamodel';
 
 export class TimesheetComponent implements OnInit {
   //meses: TimesheetMesComponent[]
-  today: number = Date.now();
+  today : Date;
   loader = { 'user': true, 'timesheet': true };
   timesheets: any[];
-  filteredTimesheets: any[];
   fecha: any[];
   items: any[];
+  orderedTimesheet: any[];
 
   constructor(
-   // private timesheetDateService: TimesheetMeses,
+    // private timesheetDateService: TimesheetMeses,
     public authService: AuthService,
     private db: AngularFireDatabase,
     private router: Router,
     private route: ActivatedRoute, ) {
 
+    this.today= new Date();
+    this.today.setDate(this.today.getDate() - 5);
     this.getTimesheets();
   }
 
   ngOnInit(): void {
-  //  this.getMeses();
+    //  this.getMeses();
   }
 
   private showLoader(): void {
-        console.log('Show loader');
+    console.log('Show loader');
   }
 
   private hideLoader(): void {
     console.log('Hide loader');
   }
 
-  createRange(numero) {
-    this.items = [];
-    let i = 0;
+  private getTimesheets() {
 
-    for (i = 1; i <= numero; i++) {
-       this.items.push(i);
+    this.db.list('/timesheets').subscribe(a => {
+      this.timesheets = a;
+      this.timesheets.forEach(timesheet => {
+        timesheet.userObj = new User();
+        timesheet.proposalObj = new Proposal();
+        this.db.object('/users/' + timesheet.user).subscribe(a => { timesheet.userObj = a; this.loader.user = false; });
+        timesheet.incurridos.forEach(incurrido =>
+          this.db.object('/proposals/' + incurrido.proposal)
+          .subscribe(a => { incurrido.proposalObj = a;})
+        );
+        this.loader.timesheet = false;
+        this.timesheets.sort(this.sortTS);
+      }
+      );
+      
     }
-    return this.items;
+    );
   }
 
-  private getTimesheets() {
-     this.db.list('/timesheets').subscribe(a => {
-       this.timesheets = a;
-       this.timesheets.forEach(timesheet => {
-         timesheet.userObj = new User();
-         timesheet.proposalObj = new Proposal();
-         this.db.object('/users/' + timesheet.user).subscribe(a => { timesheet.userObj = a; this.loader.user = false; });
-         this.db.object('/proposals/' + timesheet.proposal).subscribe(a => { timesheet.proposalObj = a; this.loader.timesheet = false; });
-        }
-       );
-       this.filteredTimesheets = this.timesheets;
-      }
-     );
-   }
+  sortTS(a: Timesheet, b:Timesheet){
+    if(a.year != b.year){
+      return a.year > b.year? -1 : 1;
+    }
+    return a.month > b.month? -1 : 1;
+  }
 
-   suma (num1: number, num2: number) {
-
-    let result: number;
-
-    result = Number(num1) + Number(num2);
-
-    return result;
-   }
 }

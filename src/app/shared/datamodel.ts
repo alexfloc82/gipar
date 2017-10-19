@@ -39,14 +39,24 @@ export class Estimate {
 export class Timesheet {
 	id: string;
 	user: string;
-	propuesta: string;
-	pm: string;
 	year: string;
 	month: string;
+	incurridos: Incurrido[];
+	
+
+	constructor() { 
+		this.incurridos = [];
+	}
+}
+
+export class Incurrido{
+
+	propuesta: string;
+	pm: string;
 	q1: number;
 	q2: number;
-
 	constructor() { }
+
 }
 
 export class Travel {

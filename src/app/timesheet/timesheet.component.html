@@ -1,13 +1,13 @@
 <div class="container text-center pt-5" *ngIf="loader.user && loader.timesheet">
   <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
 </div>
-<div class="container p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
+<div class="container-fluid p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
     <div class="container-fluid m-3">
-        <h2 class="text-primary">ACTIVE TIMESHEETS</h2>
+        <h2 class="text-primary">TIMESHEETS</h2>
         <div class="row p-1">
-            <div class="col-md-4 mt-2" *ngFor="let index of [0,1,2]">
+            <div class="col-3 mt-2" *ngFor="let tsheet of timesheets">
                 <div class="card">
-                    <div class="card-header" align="center">{{(suma((today | date: 'M'), index))}}</div>
+                    <div class="card-header" align="center">{{tsheet.month}} / {{tsheet.year}}</div>
                     <div class="card-block">
                         <table class="table"> 
                             <thead class="card-title"> 
@@ -15,54 +15,16 @@
                                 <th>Q1</th> 
                                 <th>Q2</th> 
                             </thead> 
-                            <tbody class="card-text" *ngFor='let tsheets of filteredTimesheets;let last = last'> 
-                                <!--<p>{{(tsheets.month|number)}}-{{(suma((today | date: 'M'), index)).toString()}}-{{(tsheets.month|number)===(suma((today | date: "M"), index)).toString()}}</p>-->
-                                <tr *ngIf='(authService.user | async)?.uid===tsheets.userObj.uid && (tsheets.month|number)===(suma((today | date: "M"), index)).toString() && (tsheets.year).toString()===(today |date: "y")'> 
-                                    <td>{{tsheets.proposalObj.id}}</td>
-                                    <td>{{tsheets.q1}}</td> 
-                                    <td>{{tsheets.q2}}</td> 
-                                </tr>
-                                <tr *ngIf='last'>
-                                    <td><b>Total</b></td>
-                                    <td></td> 
-                                    <td></td>
+                            <tbody class="card-text"> 
+                                <tr  *ngFor='let incurrido of tsheet.incurridos'> 
+                                    <td>{{incurrido.proposalObj.id}}</td>
+                                    <td>{{incurrido.q1}}</td> 
+                                    <td>{{incurrido.q2}}</td> 
                                 </tr>
                             </tbody> 
                         </table> 
-
-                        <button class="btn btn-info is-pointer" (click)="gotoDetail(filteredTimesheets.$key)">Edit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid m-3">
-        <h2 class="text-primary">PAST TIMESHEETS</h2>
-        <div class="row p-1">
-            <div class="col-md-4 mt-2" *ngFor="let index of [1,2,3]">
-                <div class="card">
-                    <div class="card-header" align="center">{{((today | date: 'M')-index)}}</div>
-                    <div class="card-block">
-                        <table class="table"> 
-                            <thead class="card-title"> 
-                                <th>Proposal</th> 
-                                <th>Q1</th> 
-                                <th>Q2</th> 
-                            </thead> 
-                            <tbody class="card-text" *ngFor='let tsheets of filteredTimesheets; let last=last'> 
-                                <tr *ngIf='(authService.user | async)?.uid===tsheets.userObj.uid && (tsheets.month|number)===((today |date: "M")-index).toString() && (tsheets.year).toString()===(today |date: "y")'>
-                                    <td>{{tsheets.proposalObj.id}}</td>
-                                    <td>{{tsheets.q1}}</td> 
-                                    <td>{{tsheets.q2}}</td> 
-                                </tr>
-                                <tr *ngIf='last'>
-                                    <td><b>Total</b></td>
-                                    <td></td> 
-                                    <td></td>
-                                </tr>
-                            </tbody> 
-                        </table> 
-                        <button class="btn btn-info is-pointer" (click)="gotoDetail(filteredTimesheets.$key)">Edit</button>
+                        <button class="btn btn-info is-pointer" (click)="gotoDetail(filteredTimesheets.$key)" 
+                        *ngIf="(tsheet.year == today.getFullYear() && tsheet.month > today.getMonth()) || tsheet.year > today.getFullYear()">Edit</button>
                     </div>
                 </div>
             </div>
