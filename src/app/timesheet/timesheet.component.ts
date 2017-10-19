@@ -54,11 +54,11 @@ export class TimesheetComponent implements OnInit {
           }
           );
         }
-        this.loader.timesheet = false;
+        
         this.timesheets.sort(this.sortTS);
       }
       );
-
+      this.loader.timesheet = false;
     }
     );
   }
