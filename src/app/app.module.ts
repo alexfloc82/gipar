@@ -19,13 +19,15 @@ import { AppComponent } from './app.component';
 
 import { environment } from '../environments/environment';
 
+import {GrowlModule} from 'primeng/primeng';
+
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule, AppRouteModule, CoreModule, TimesheetModule, ProposalModule, SharedModule, HolidaysModule, 
+    BrowserModule, AppRouteModule, CoreModule, TimesheetModule, ProposalModule, SharedModule, HolidaysModule, GrowlModule,
     UserModule, AreaModule, HomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule

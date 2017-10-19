@@ -52,10 +52,12 @@ export class Timesheet {
 export class Incurrido{
 
 	propuesta: string;
+	proposalObj: Proposal;
 	pm: string;
 	q1: number;
 	q2: number;
-	constructor() { }
+	constructor() { 
+	}
 
 }
 

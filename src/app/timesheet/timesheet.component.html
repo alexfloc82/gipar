@@ -16,14 +16,16 @@
                                 <th>Q2</th> 
                             </thead> 
                             <tbody class="card-text"> 
+                                <ng-container *ngIf="tsheet.incurridos">
                                 <tr  *ngFor='let incurrido of tsheet.incurridos'> 
-                                    <td>{{incurrido.proposalObj.id}}</td>
+                                    <td>{{incurrido.proposal}}</td>
                                     <td>{{incurrido.q1}}</td> 
                                     <td>{{incurrido.q2}}</td> 
                                 </tr>
+                            </ng-container>
                             </tbody> 
                         </table> 
-                        <button class="btn btn-info is-pointer" (click)="gotoDetail(filteredTimesheets.$key)" 
+                        <button class="btn btn-info is-pointer" (click)="gotoDetail(tsheet.$key)" 
                         *ngIf="(tsheet.year == today.getFullYear() && tsheet.month > today.getMonth()) || tsheet.year > today.getFullYear()">Edit</button>
                     </div>
                 </div>

@@ -6,12 +6,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { TimesheetRoutingModule } from './timesheet-routing.module';
 import { TimesheetComponent } from './timesheet.component';
+import { TimesheetDetailComponent } from './timesheet-detail/timesheet-detail.component';
 
 @NgModule({
   imports: [
-    CommonModule,
-    TimesheetRoutingModule
+    CommonModule,FormsModule,
+    TimesheetRoutingModule, NgbModule.forRoot()
   ],
-  declarations: [TimesheetComponent]
+  declarations: [TimesheetComponent, TimesheetDetailComponent]
 })
 export class TimesheetModule { }

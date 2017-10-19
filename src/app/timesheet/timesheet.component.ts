@@ -15,7 +15,7 @@ import { Timesheet, User, Proposal } from '../shared/datamodel';
 
 export class TimesheetComponent implements OnInit {
   //meses: TimesheetMesComponent[]
-  today : Date;
+  today: Date;
   loader = { 'user': true, 'timesheet': true };
   timesheets: any[];
   fecha: any[];
@@ -29,7 +29,7 @@ export class TimesheetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute, ) {
 
-    this.today= new Date();
+    this.today = new Date();
     this.today.setDate(this.today.getDate() - 5);
     this.getTimesheets();
   }
@@ -46,24 +46,32 @@ export class TimesheetComponent implements OnInit {
         timesheet.userObj = new User();
         timesheet.proposalObj = new Proposal();
         this.db.object('/users/' + timesheet.user).subscribe(a => { timesheet.userObj = a; this.loader.user = false; });
-        timesheet.incurridos.forEach(incurrido =>
-          this.db.object('/proposals/' + incurrido.proposal)
-          .subscribe(a => { incurrido.proposalObj = a;})
-        );
+        if (timesheet.incurridos) {
+          timesheet.incurridos.forEach(incurrido =>
+            {incurrido.proposalObj={id:""};
+            this.db.object('/proposals/' + incurrido.proposal)
+              .subscribe(a => { incurrido.proposalObj = a; })
+          }
+          );
+        }
         this.loader.timesheet = false;
         this.timesheets.sort(this.sortTS);
       }
       );
-      
+
     }
     );
   }
 
-  sortTS(a: Timesheet, b:Timesheet){
-    if(a.year != b.year){
-      return a.year > b.year? -1 : 1;
+  sortTS(a: Timesheet, b: Timesheet) {
+    if (a.year != b.year) {
+      return a.year > b.year ? -1 : 1;
     }
-    return a.month > b.month? -1 : 1;
+    return a.month > b.month ? -1 : 1;
+  }
+
+  gotoDetail(id: string): void {
+    this.router.navigate([id], { relativeTo: this.route });
   }
 
 }
