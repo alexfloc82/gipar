@@ -38,14 +38,6 @@ export class TimesheetComponent implements OnInit {
     //  this.getMeses();
   }
 
-  private showLoader(): void {
-    console.log('Show loader');
-  }
-
-  private hideLoader(): void {
-    console.log('Hide loader');
-  }
-
   private getTimesheets() {
 
     this.db.list('/timesheets').subscribe(a => {
