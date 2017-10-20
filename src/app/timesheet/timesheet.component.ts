@@ -42,20 +42,16 @@ export class TimesheetComponent implements OnInit {
 
     this.db.list('/timesheets').subscribe(a => {
       this.timesheets = a;
+      this.timesheets.sort(this.sortTS);
       this.timesheets.forEach(timesheet => {
         timesheet.userObj = new User();
-        timesheet.proposalObj = new Proposal();
         this.db.object('/users/' + timesheet.user).subscribe(a => { timesheet.userObj = a; this.loader.user = false; });
         if (timesheet.incurridos) {
-          timesheet.incurridos.forEach(incurrido =>
-            {incurrido.proposalObj={id:""};
-            this.db.object('/proposals/' + incurrido.proposal)
-              .subscribe(a => { incurrido.proposalObj = a; })
+          timesheet.incurridos.forEach(incurrido => {
+            incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
           }
           );
         }
-        
-        this.timesheets.sort(this.sortTS);
       }
       );
       this.loader.timesheet = false;

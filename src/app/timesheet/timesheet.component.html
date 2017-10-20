@@ -1,26 +1,28 @@
 <div class="container text-center pt-5" *ngIf="loader.user && loader.timesheet">
   <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
 </div>
-<div class="container-fluid p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
-    <div class="container-fluid m-3">
+<div class="container p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
+    <div class="container m-3">
         <h2 class="text-primary">TIMESHEETS</h2>
         <div class="row p-1">
-            <div class="col-3 mt-2" *ngFor="let tsheet of timesheets">
+            <div class="col-12 mt-2" *ngFor="let tsheet of timesheets">
                 <div class="card">
                     <div class="card-header" align="center">{{tsheet.month}} / {{tsheet.year}}</div>
                     <div class="card-block">
                         <table class="table"> 
                             <thead class="card-title"> 
                                 <th>Proposal</th> 
+                                <th>PM</th> 
                                 <th>Q1</th> 
                                 <th>Q2</th> 
                             </thead> 
                             <tbody class="card-text"> 
                                 <ng-container *ngIf="tsheet.incurridos">
                                 <tr  *ngFor='let incurrido of tsheet.incurridos'> 
-                                    <td>{{incurrido.proposal}}</td>
-                                    <td>{{incurrido.q1}}</td> 
-                                    <td>{{incurrido.q2}}</td> 
+                                    <td>{{(incurrido.proposalObj |async)?.id}}</td>
+                                    <td>{{incurrido.pm}}</td>
+                                    <td>{{incurrido.q1}}</td>
+                                    <td>{{incurrido.q2}}</td>
                                 </tr>
                             </ng-container>
                             </tbody> 
