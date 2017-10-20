@@ -11,7 +11,7 @@
         <a routerLink="Home" class="nav-link" routerLinkActive="active">Home</a>
       </li>
       <li class="nav-item">
-        <a routerLink="Proposal" class="nav-link" routerLinkActive="active" *ngIf="(authService.userProfile|async)?.role == 'Admin'">Proposals</a>
+        <a routerLink="Proposal" class="nav-link" routerLinkActive="active" *ngIf="checked">Proposals</a>
       </li>
       <li class="nav-item">
         <a routerLink="Timesheet" class="nav-link" routerLinkActive="active">Timesheets</a>
@@ -23,26 +23,28 @@
         <a routerLink="Travel" class="nav-link" routerLinkActive="active">Travels</a>
       </li>
       <li class="nav-item">
-        <a routerLink="User" class="nav-link" routerLinkActive="active" *ngIf="(authService.userProfile|async)?.role == 'Admin'">Users</a>
+        <a routerLink="User" class="nav-link" routerLinkActive="active" *ngIf="checked">Users</a>
       </li>
       <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">
             Account
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" routerLink="user/Reset">Change Password</a>
-          </div>
-        </li>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" routerLink="user/Reset">Change Password</a>
+        </div>
+      </li>
     </ul>
     <div class="form-inline my-2 my-lg-0">
-      <label>Admin Mode:</label>
-      <p-inputSwitch [(ngModel)]="checked" (onChange)="handleChange($event)" class="mr-2 ml-2"></p-inputSwitch>
+      <ng-container *ngIf="(authService.userProfile|async)?.role == 'Admin' || (authService.userProfile|async)?.role == 'E-Team'">
+        <label>Admin Mode:</label>
+        <p-inputSwitch [(ngModel)]="checked" (onChange)="handleChange($event)" class="mr-2 ml-2"></p-inputSwitch>
+      </ng-container>
       <div class="mr-sm-2">{{ (authService.user | async)?.email }}</div>
       <button class="btn btn-outline-warning my-2 my-sm-0" (click)="logout()" *ngIf="authService.user | async">Logout</button>
     </div>
   </div>
 </nav>
-<div class="container-fluid pt-1" >
-    <p-growl [(value)]="msgs"></p-growl>
+<div class="container-fluid pt-1">
+  <p-growl [(value)]="msgs"></p-growl>
   <router-outlet></router-outlet>
 </div>

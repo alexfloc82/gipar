@@ -41,7 +41,7 @@ export class ProposalDetailComponent implements OnInit {
 
     this.loader = true;
     this.db.list('/users').subscribe(a => this.users = a);
-    this.db.list('/areas').subscribe(areas => areas.forEach(area =>  this.areas.push({ key: area.$key, value: area.id })));
+    this.db.list('/areas').subscribe(areas => areas.forEach(area =>  this.areas.push({ key: area.$key, value: area.name })));
 
   }
 

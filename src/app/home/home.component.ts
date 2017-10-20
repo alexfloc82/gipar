@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/auth/auth.service';
+import { AdminService } from '../core/utils/admin.service';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +11,18 @@ import { AuthService } from '../core/auth/auth.service';
 export class HomeComponent implements OnInit {
   email: string;
   password: string;
+  isAdmin: boolean;
 
-  constructor(public authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService,
+    private router: Router,
+    private as: AdminService) {
+    this.isAdmin = this.as.isChecked;
+  }
 
   ngOnInit() {
+    this.as.check.subscribe(value => {
+      this.isAdmin = value;
+    });
   }
 
   gotoMenu(menu: string): void {
@@ -29,7 +38,7 @@ export class HomeComponent implements OnInit {
     this.email = this.password = '';
   }
 
-  resetPassword(){
+  resetPassword() {
     this.router.navigate(['user/Forgot']);
   }
 

@@ -1,48 +1,57 @@
 <div class="container text-center pt-5" *ngIf="loader">
   <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
 </div>
-<div class="container p-3" *ngIf="!loader">
-  <div class="container-fluid m-3">
-    <h2 class="text-primary">In progress</h2>
-    <div class="row p-1">
-      <div class="col-md-4 mt-2" *ngFor="let proposal of inprogressProposals">
-        <div *ngIf="proposal.$key"  class="card">
-          <div class="card-header">
-            {{proposal.id}}
-          </div>
-          <div class="card-block">
-            <h4 class="card-title">{{proposal.title}}</h4>
-            <p class="card-text">From: {{proposal.start | date:'dd/MM/yyyy'}}</p>
-            <p class="card-text">To: {{proposal.end | date:'dd/MM/yyyy'}}</p>
-            <button class="btn btn-info is-pointer" (click)="gotoDetail(proposal.$key)">Edit</button>
-            <button class="btn btn-info is-pointer" >Show Status</button>
-          </div>
-        </div>
-        <div *ngIf="!proposal.$key" class="card">
-          <div class="card-header">
-            Add New
-          </div>
-          <div class="card-block text-center">
-            <div><span class="fa fa-file-text-o fa-5x btn-link is-pointer" (click)="gotoDetail('-')"></span></div>
-          </div>
-        </div>
+<div class="container-fluid p-3" *ngIf="!loader">
+  <div class="row">
+    <div class="col-3 m-3 p-2 border rounded">
+      <div class="form-group">
+        <label>Area</label>
+        <select class="form-control" [(ngModel)]="filter.area">
+                    <option></option>
+                    <option *ngFor="let area of areas" [value]="area.$key">{{area.name}}</option>
+            </select>
       </div>
+      <span class="btn btn-outline-info my-2 my-sm-0" (click)="getProposals()">Apply filter</span>
     </div>
-  </div>
-  <div class="container-fluid m-3">
-    <h2   class="text-primary">Closed</h2>
-    <div>
+    <div class="col-8 m-3 p-2 border rounded">
+      <h2 class="text-primary">In progress</h2>
       <div class="row p-1">
-        <div class="col-md-4 mt-2" *ngFor="let proposal of closedProposals">
-          <div class="card">
+        <div class="col-md-4 mt-2" *ngFor="let proposal of inprogressProposals">
+          <div *ngIf="proposal.$key" class="card">
             <div class="card-header">
               {{proposal.id}}
             </div>
             <div class="card-block">
               <h4 class="card-title">{{proposal.title}}</h4>
-              <p class="card-text">Starts: {{proposal.start | date:'dd/MM/yyyy'}}</p>
-              <p class="card-text">Ends: {{proposal.end | date:'dd/MM/yyyy'}}</p>
-              <button class="btn btn-info" (click)="gotoDetail(proposal.$key)">Show Status</button>
+              <p class="card-text">From: {{proposal.start | date:'dd/MM/yyyy'}}</p>
+              <p class="card-text">To: {{proposal.end | date:'dd/MM/yyyy'}}</p>
+              <button class="btn btn-info is-pointer" (click)="gotoDetail(proposal.$key)">Detail</button>
+            </div>
+          </div>
+          <div *ngIf="!proposal.$key" class="card">
+            <div class="card-header">
+              Add New
+            </div>
+            <div class="card-block text-center">
+              <div><span class="fa fa-file-text-o fa-5x btn-link is-pointer" (click)="gotoDetail('-')"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h2 class="text-primary mt-3">Closed</h2>
+      <div>
+        <div class="row p-1">
+          <div class="col-md-4 mt-2" *ngFor="let proposal of closedProposals">
+            <div class="card">
+              <div class="card-header">
+                {{proposal.id}}
+              </div>
+              <div class="card-block">
+                <h4 class="card-title">{{proposal.title}}</h4>
+                <p class="card-text">Starts: {{proposal.start | date:'dd/MM/yyyy'}}</p>
+                <p class="card-text">Ends: {{proposal.end | date:'dd/MM/yyyy'}}</p>
+                <button class="btn btn-info" (click)="gotoDetail(proposal.$key)">Detail</button>
+              </div>
             </div>
           </div>
         </div>

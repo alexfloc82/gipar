@@ -17,21 +17,30 @@ export class ProposalComponent implements OnInit {
   proposals: any[];
   closedProposals: any[];
   inprogressProposals: any[];
+  filter:any;
+  areas:any[];
 
   constructor(
     public authService: AuthService, 
     private db: AngularFireDatabase, 
     private router: Router,
     private route: ActivatedRoute,) { 
-      db.list('/proposals').subscribe(a => {
-      this.proposals = a;
-      this.closedProposals = this.proposals.filter(proposal => proposal.closed);
-      this.inprogressProposals = this.proposals.filter(proposal => !proposal.closed);
-      this.inprogressProposals.push({});
-      this.loader=false;});
+      this.filter={area:""};
+      this.db.list('/areas').subscribe(areas => this.areas=areas);
+      this.getProposals(); 
     }
 
   ngOnInit() {
+  }
+
+  getProposals(){
+    
+    this.db.list('/proposals').subscribe(a => {
+    this.proposals = a;
+    this.closedProposals = this.proposals.filter(proposal => proposal.closed && (proposal.area == this.filter.area || this.filter.area==""));
+    this.inprogressProposals = this.proposals.filter(proposal => !proposal.closed && (proposal.area == this.filter.area || this.filter.area==""));
+    this.inprogressProposals.push({});
+    this.loader=false;});
   }
 
   gotoDetail(id: string): void {

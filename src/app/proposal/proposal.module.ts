@@ -11,7 +11,7 @@ import { ProposalDetailComponent } from './proposal-detail.component';
 
 @NgModule({
   imports: [
-    CommonModule, CoreModule,
+    CommonModule,
     ProposalRoutingModule, FormsModule, NgbModule.forRoot()
   ],
   declarations: [ProposalComponent, ProposalDetailComponent],
