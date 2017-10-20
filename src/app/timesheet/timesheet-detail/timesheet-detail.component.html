@@ -13,13 +13,13 @@
         <div class="form-group">
           <label>User</label>
           <input type="text" name="selectedUser" class="form-control" [ngbTypeahead]="usearch" [(ngModel)]="selectedUser" [inputFormatter]="uformatter"
-            [resultFormatter]="uformatter" (selectItem)="selectUser($event)">
+            [resultFormatter]="uformatter" [disabled]="true" (selectItem)="selectUser($event)">
         </div>
       </div>
       <div class="col-4">
         <div class="form-group">
           <label>Month</label>
-          <select [(ngModel)]="form.month" class="form-control">
+          <select [(ngModel)]="form.month" class="form-control" [disabled]="disable">
             <option value="0">January</option>
             <option value="1">February</option>
             <option value="2">March</option>
@@ -38,7 +38,7 @@
       <div class="col-4">
         <div class="form-group">
           <label>Year</label>
-          <select [(ngModel)]="form.year" class="form-control">
+          <select [(ngModel)]="form.year" class="form-control" [disabled]="disable">
             <option value="2017">2017</option>
             <option value="2018">2018</option>
           </select>
@@ -59,11 +59,13 @@
             </thead>
             <tbody>
               <tr *ngFor="let incurrido of form.incurridos;let i = index;">
-                <td><select class="form-control" [(ngModel)]="form.incurridos[i].proposal">
-                  <option *ngFor="let proposal of proposals" [value]="proposal.$key">{{proposal.id}}</option>
+                <td><select class="form-control" [(ngModel)]="form.incurridos[i].proposal" (change)="selectProposal(i)">
+                  <option *ngFor="let proposal of proposals" [value]="proposal.$key">{{proposal.id}} - {{proposal.title}}</option>
                   </select>
                 </td>
-                <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].pm"></td>
+                <td><select class="form-control" [(ngModel)]="form.incurridos[i].pm">
+                    <option *ngFor="let pm of pms[i]" [value]="pm.value">{{pm.value}}</option>
+                    </select></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q1"></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q2"></td>
                 <td><button class="btn btn-outline-danger" (click)="deleteIncurrido(i)"><span class="fa fa-trash"></span></button></td>

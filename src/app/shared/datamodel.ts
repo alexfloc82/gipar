@@ -51,7 +51,7 @@ export class Timesheet {
 
 export class Incurrido{
 
-	propuesta: string;
+	proposal: string;
 	proposalObj: Proposal;
 	pm: string;
 	q1: number;

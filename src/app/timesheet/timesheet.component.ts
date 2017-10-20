@@ -36,16 +36,22 @@ export class TimesheetComponent implements OnInit {
   }
 
   private getTimesheets() {
-
-    this.db.list('/timesheets').subscribe(a => {
+    this.authService.user.subscribe(user =>{
+    this.db.list('/timesheets', {query:{orderByChild:"user",equalTo:user.uid}}).subscribe(a => {
       this.timesheets = a;
       this.timesheets.sort(this.sortTS);
       this.timesheets.forEach(timesheet => {
         timesheet.date =  new Date(timesheet.year, timesheet.month, 1);
         timesheet.userObj = new User();
-        this.db.object('/users/' + timesheet.user).subscribe(a => { timesheet.userObj = a; this.loader.user = false; });
+        this.db.object('/users/' + timesheet.user).subscribe(a => { 
+          timesheet.userObj = a; 
+          this.loader.user = false; });
         if (timesheet.incurridos) {
+          timesheet.totalq1 = 0;
+          timesheet.totalq2 = 0;
           timesheet.incurridos.forEach(incurrido => {
+            timesheet.totalq1 = timesheet.totalq1 + Number(incurrido.q1);
+            timesheet.totalq2 = timesheet.totalq2 + Number(incurrido.q2);
             incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
           }
           );
@@ -55,6 +61,7 @@ export class TimesheetComponent implements OnInit {
       this.loader.timesheet = false;
     }
     );
+    })
   }
 
   sortTS(a: Timesheet, b: Timesheet) {

@@ -19,11 +19,17 @@
                             <tbody class="card-text"> 
                                 <ng-container *ngIf="tsheet.incurridos">
                                 <tr  *ngFor='let incurrido of tsheet.incurridos'> 
-                                    <td>{{(incurrido.proposalObj |async)?.id}}</td>
+                                    <td>{{(incurrido.proposalObj |async)?.id}} - {{(incurrido.proposalObj |async)?.title}}</td>
                                     <td>{{incurrido.pm}}</td>
                                     <td>{{incurrido.q1}}</td>
                                     <td>{{incurrido.q2}}</td>
                                 </tr>
+                                <tr>
+                                    <th>Total</th>
+                                    <th></th>
+                                    <th>{{tsheet.totalq1}}</th>
+                                    <th>{{tsheet.totalq2}}</th>
+                                  </tr>
                             </ng-container>
                             </tbody> 
                         </table> 
