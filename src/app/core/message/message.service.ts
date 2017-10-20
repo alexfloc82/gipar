@@ -25,10 +25,10 @@ export class MessageService {
                 summary = 'Error';
                 break;
                 case 'warning':
-                summary = 'Atención';
+                summary = 'Warning';
                 break;
                 case 'success':
-                summary = 'Exito';
+                summary = 'Success';
                 break;
                 case 'info':
                 summary = 'Info';

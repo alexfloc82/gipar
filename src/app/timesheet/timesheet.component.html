@@ -3,11 +3,11 @@
 </div>
 <div class="container p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
     <div class="container m-3">
-        <h2 class="text-primary">TIMESHEETS</h2>
+        <h2 class="text-primary">TIMESHEETS <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" (click)="gotoDetail('-')">New Timesheet</span></h2>
         <div class="row p-1">
             <div class="col-12 mt-2" *ngFor="let tsheet of timesheets">
                 <div class="card">
-                    <div class="card-header" align="center">{{tsheet.month}} / {{tsheet.year}}</div>
+                    <div class="card-header" align="center">{{tsheet.date | date:"MMMM y"}}</div>
                     <div class="card-block">
                         <table class="table"> 
                             <thead class="card-title"> 

@@ -14,7 +14,6 @@ import { Timesheet, User, Proposal } from '../shared/datamodel';
 })
 
 export class TimesheetComponent implements OnInit {
-  //meses: TimesheetMesComponent[]
   today: Date;
   loader = { 'user': true, 'timesheet': true };
   timesheets: any[];
@@ -23,19 +22,17 @@ export class TimesheetComponent implements OnInit {
   orderedTimesheet: any[];
 
   constructor(
-    // private timesheetDateService: TimesheetMeses,
     public authService: AuthService,
     private db: AngularFireDatabase,
     private router: Router,
     private route: ActivatedRoute, ) {
 
     this.today = new Date();
-    this.today.setDate(this.today.getDate() - 5);
+    this.today.setDate(this.today.getDate() - 45);
     this.getTimesheets();
   }
 
   ngOnInit(): void {
-    //  this.getMeses();
   }
 
   private getTimesheets() {
@@ -44,6 +41,7 @@ export class TimesheetComponent implements OnInit {
       this.timesheets = a;
       this.timesheets.sort(this.sortTS);
       this.timesheets.forEach(timesheet => {
+        timesheet.date =  new Date(timesheet.year, timesheet.month, 1);
         timesheet.userObj = new User();
         this.db.object('/users/' + timesheet.user).subscribe(a => { timesheet.userObj = a; this.loader.user = false; });
         if (timesheet.incurridos) {

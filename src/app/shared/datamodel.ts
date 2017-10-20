@@ -39,8 +39,8 @@ export class Estimate {
 export class Timesheet {
 	id: string;
 	user: string;
-	year: string;
-	month: string;
+	year: number;
+	month: number;
 	incurridos: Incurrido[];
 	
 

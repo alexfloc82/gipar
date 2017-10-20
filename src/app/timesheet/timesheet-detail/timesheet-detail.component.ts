@@ -31,6 +31,7 @@ export class TimesheetDetailComponent implements OnInit {
   selectedResources: User[];
   form: Timesheet; //form data
   proposals: Proposal[];
+  today: Date;
 
 
   constructor(private db: AngularFireDatabase,
@@ -46,13 +47,19 @@ export class TimesheetDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.today = new Date();
     this.route.paramMap.forEach(
       param => {
         // new proposal
         if (param.get('id') == '-') {
           this.form = new Timesheet();
+          this.form.month = this.today.getMonth();
+          this.form.year = this.today.getFullYear();
           this.authService.userProfile.subscribe(user => {
-            this.db.object('/users/' + user.$key).subscribe(user => this.selectedUser = user);
+            this.db.object('/users/' + user.$key).subscribe(user => {
+              this.selectedUser = user;
+              this.form.user = user.$key;
+            });
           }
           );
           this.loader = false;
@@ -92,6 +99,12 @@ export class TimesheetDetailComponent implements OnInit {
     }
   }
 
+  delete(){
+    this.timesheet.remove().then(a => this.location.back())
+    .catch(err => this.messageService.sendMessage(err.message, 'error'))
+      .then(a => this.messageService.sendMessage('Timesheet has been deleted', 'success'))
+  }
+
   usearch = (text$: Observable<string>) =>
     map.call(debounceTime.call(text$, 200),
       term => term === '' ? [] : this.users.filter(user => (user.adsuser + ' - ' + user.name + ' ' + user.lastname).toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10));
@@ -107,6 +120,10 @@ export class TimesheetDetailComponent implements OnInit {
       this.form.incurridos = [];
     }
     this.form.incurridos.push(new Incurrido());
+  }
+
+  deleteIncurrido(index: number) {
+    this.form.incurridos.splice(index, 1);
   }
 
 
