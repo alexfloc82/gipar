@@ -35,6 +35,8 @@
         </li>
     </ul>
     <div class="form-inline my-2 my-lg-0">
+      <label>Admin Mode:</label>
+      <p-inputSwitch [(ngModel)]="checked" (onChange)="handleChange($event)" class="mr-2 ml-2"></p-inputSwitch>
       <div class="mr-sm-2">{{ (authService.user | async)?.email }}</div>
       <button class="btn btn-outline-warning my-2 my-sm-0" (click)="logout()" *ngIf="authService.user | async">Logout</button>
     </div>

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { FormsModule } from '@angular/forms';
 
 import {AppRouteModule} from './app.route.module';
 import {CoreModule} from './core/core.module';
@@ -21,13 +22,15 @@ import { environment } from '../environments/environment';
 
 import {GrowlModule} from 'primeng/primeng';
 
+import {InputSwitchModule} from 'primeng/primeng';
+
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule, AppRouteModule, CoreModule, TimesheetModule, ProposalModule, SharedModule, HolidaysModule, GrowlModule,
+    BrowserModule, AppRouteModule, CoreModule,FormsModule, TimesheetModule, ProposalModule, SharedModule, HolidaysModule, GrowlModule,InputSwitchModule,
     UserModule, AreaModule, HomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule

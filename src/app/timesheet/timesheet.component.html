@@ -1,43 +1,84 @@
 <div class="container text-center pt-5" *ngIf="loader.user && loader.timesheet">
-  <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
+    <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
 </div>
-<div class="container p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
-    <div class="container m-3">
-        <h2 class="text-primary">TIMESHEETS <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" (click)="gotoDetail('-')">New Timesheet</span></h2>
-        <div class="row p-1">
-            <div class="col-12 mt-2" *ngFor="let tsheet of timesheets">
-                <div class="card">
-                    <div class="card-header" align="center">{{tsheet.date | date:"MMMM y"}}</div>
-                    <div class="card-block">
-                        <table class="table"> 
-                            <thead class="card-title"> 
-                                <th>Proposal</th> 
-                                <th>PM</th> 
-                                <th>Q1</th> 
-                                <th>Q2</th> 
-                            </thead> 
-                            <tbody class="card-text"> 
-                                <ng-container *ngIf="tsheet.incurridos">
-                                <tr  *ngFor='let incurrido of tsheet.incurridos'> 
-                                    <td>{{(incurrido.proposalObj |async)?.id}} - {{(incurrido.proposalObj |async)?.title}}</td>
-                                    <td>{{incurrido.pm}}</td>
-                                    <td>{{incurrido.q1}}</td>
-                                    <td>{{incurrido.q2}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Total</th>
-                                    <th></th>
-                                    <th>{{tsheet.totalq1}}</th>
-                                    <th>{{tsheet.totalq2}}</th>
-                                  </tr>
-                            </ng-container>
-                            </tbody> 
-                        </table> 
-                        <button class="btn btn-info is-pointer" (click)="gotoDetail(tsheet.$key)" 
-                        *ngIf="(tsheet.year == today.getFullYear() && tsheet.month > today.getMonth()) || tsheet.year > today.getFullYear()">Edit</button>
+<div class="container-fluid p-3" id="home-timesheets" *ngIf="!(loader.user && loader.timesheet)">
+    <div class="row">
+        <div class="col-3 m-3 p-2 border rounded">
+            <div class="form-group">
+                <label>User</label>
+                <select class="form-control" [(ngModel)]="filter.user" [disabled]="!isAdmin">
+                        <option></option>
+                        <option *ngFor="let user of users" [value]="user.uid">{{user.name}} {{user.lastname}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Month</label>
+                <select class="form-control" [(ngModel)]="filter.month">
+                    <option></option>
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Year</label>
+                <select class="form-control" [(ngModel)]="filter.year">
+                    <option></option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2018">2019</option>
+                    <option value="2018">2020</option>
+                </select>
+            </div>
+            <span class="btn btn-outline-info my-2 my-sm-0" (click)="getTimesheets()">Apply filter</span>
+        </div>
+        <div class="col-8 m-3 p-2 border rounded">
+            <h2 class="text-info">TIMESHEETS <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" (click)="gotoDetail('-')">New Timesheet</span></h2>
+            <div class="row p-1">
+                <div class="col-12 mt-2" *ngFor="let tsheet of filteredTimesheet">
+                    <div class="card">
+                        <div class="card-header" align="center">{{tsheet.userObj.name}} {{tsheet.userObj.lastname}}- {{tsheet.date | date:"MMMM y"}}</div>
+                        <div class="card-block">
+                            <table class="table">
+                                <thead class="card-title">
+                                    <th>Proposal</th>
+                                    <th>PM</th>
+                                    <th>Q1</th>
+                                    <th>Q2</th>
+                                </thead>
+                                <tbody class="card-text">
+                                    <ng-container *ngIf="tsheet.incurridos">
+                                        <tr *ngFor='let incurrido of tsheet.incurridos'>
+                                            <td>{{(incurrido.proposalObj |async)?.id}} - {{(incurrido.proposalObj |async)?.title}}</td>
+                                            <td>{{incurrido.pm}}</td>
+                                            <td>{{incurrido.q1}}</td>
+                                            <td>{{incurrido.q2}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <th></th>
+                                            <th>{{tsheet.totalq1}}</th>
+                                            <th>{{tsheet.totalq2}}</th>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                            <button class="btn btn-info is-pointer" (click)="gotoDetail(tsheet.$key)" *ngIf="isAdmin || ((tsheet.year == today.getFullYear() && tsheet.month > today.getMonth()) || tsheet.year > today.getFullYear())">Edit</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div><!-- End container -->
+
+</div>
+<!-- End container -->

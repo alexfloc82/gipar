@@ -10,6 +10,7 @@ import { QuestionControlService }    from './question/question-control.service';
 import {MessageService} from './message/message.service';
 import {MessageService as MsgService} from 'primeng/components/common/messageservice';
 import { UtilsService } from './utils/utils.service';
+import { AdminService } from './utils/admin.service';
 
 import { DynamicFormQuestionComponent } from '../core/question/dynamic-form-question.component';
 
@@ -20,6 +21,6 @@ import { DynamicFormQuestionComponent } from '../core/question/dynamic-form-ques
   imports: [
    NgbModule.forRoot(), HttpModule, FormsModule, CommonModule, ReactiveFormsModule
   ],
-  providers:[AuthService, AngularFireDatabase, QuestionControlService,MsgService, MessageService, UtilsService]
+  providers:[AuthService, AngularFireDatabase, QuestionControlService,MsgService, MessageService, UtilsService, AdminService]
 })
 export class CoreModule { }

@@ -5,6 +5,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { AuthService } from '../core/auth/auth.service';
 import { User, Proposal, Travel } from '../shared/datamodel';
 import { UtilsService } from '../core/utils/utils.service';
+import { AdminService } from '../core/utils/admin.service';
 
 
 @Component({
@@ -17,24 +18,31 @@ export class TravelComponent implements OnInit {
   loader = { "user": true, "travel": true };
   travels: any[];
   filteredTravels: any[];
-  
+  isAdmin: boolean;
+
   constructor(
     private db: AngularFireDatabase,
     private router: Router,
+    public authService: AuthService,
+    private as: AdminService,
     private route: ActivatedRoute,
-    private utils: UtilsService ) {
+    private utils: UtilsService) {
+    this.isAdmin = this.as.isChecked;
     this.getTravels();
   }
 
   ngOnInit() {
-
+    this.as.check.subscribe(value => {
+      this.isAdmin = value;
+      this.getTravels();
+    });
   }
 
   gotoDetail(id: string): void {
     this.router.navigate([id], { relativeTo: this.route });
   }
 
-  createNew(){
+  createNew() {
     this.router.navigate(['-'], { relativeTo: this.route });
   }
 
@@ -49,17 +57,26 @@ export class TravelComponent implements OnInit {
   }
 
   private getTravels() {
-    this.db.list('/travels').subscribe(a => {
-      this.travels = a;
-      this.travels.forEach(travel => {
-        travel.userObj = new User();
-        travel.proposalObj = new Proposal();
-        this.db.object('/users/' + travel.user).subscribe(a => { travel.userObj = a; this.loader.user = false; });
-        this.db.object('/proposals/' + travel.proposal).subscribe(a => { travel.proposalObj = a; this.loader.travel = false; });
-      }
-      );
-      this.filteredTravels = this.travels;
+    this.authService.user.subscribe(user => {
 
+      let query = {}
+
+      if (!this.isAdmin) {
+        query = { orderByChild: "user", equalTo: user.uid }
+      }
+      this.loader = { "user": true, "travel": true };
+      this.db.list('/travels', { query: query }).subscribe(a => {
+        this.travels = a;
+        this.travels.forEach(travel => {
+          travel.userObj = new User();
+          travel.proposalObj = new Proposal();
+          this.db.object('/users/' + travel.user).subscribe(a => { travel.userObj = a; this.loader.user = false; });
+          this.db.object('/proposals/' + travel.proposal).subscribe(a => { travel.proposalObj = a; this.loader.travel = false; });
+        }
+        );
+        this.filteredTravels = this.travels;
+
+      });
     });
   }
 

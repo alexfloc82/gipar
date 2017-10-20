@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../core/auth/auth.service';
+import { AdminService } from '../core/utils/admin.service';
 
 import { Timesheet, User, Proposal } from '../shared/datamodel';
 
@@ -15,31 +16,56 @@ import { Timesheet, User, Proposal } from '../shared/datamodel';
 
 export class TimesheetComponent implements OnInit {
   today: Date;
-  loader = { 'user': true, 'timesheet': true };
+  loader = { 'user': false, 'timesheet': false };
   timesheets: any[];
   fecha: any[];
   items: any[];
-  orderedTimesheet: any[];
+  filteredTimesheet: any[];
+  isAdmin: boolean;
+  filter:any;
+  users: User[];
 
   constructor(
     public authService: AuthService,
     private db: AngularFireDatabase,
     private router: Router,
+    private as: AdminService,
     private route: ActivatedRoute, ) {
+      
 
     this.today = new Date();
+    this.filter={user:"", year:this.today.getFullYear(), month:""};
     this.today.setDate(this.today.getDate() - 45);
-    this.getTimesheets();
+    
+    this.isAdmin = this.as.isChecked;
+    this.db.list('/users').subscribe(users => this.users = users);
+    this.getTimesheets(true);
   }
 
   ngOnInit(): void {
+    this.as.check.subscribe(value => {
+      this.isAdmin = value;
+      this.getTimesheets(true);
+    });
   }
 
-  private getTimesheets() {
+  private getTimesheets(userFilter?:boolean) {
+
     this.authService.user.subscribe(user =>{
-    this.db.list('/timesheets', {query:{orderByChild:"user",equalTo:user.uid}}).subscribe(a => {
+      
+      if(userFilter){
+        this.filter.user=user.uid;
+      }
+
+      let query={}
+
+      if(!this.isAdmin){
+        query ={orderByChild:"user",equalTo:user.uid}
+      }
+
+    this.db.list('/timesheets', {query:query}).subscribe(a => {
+      this.loader = { 'user': true, 'timesheet': true };
       this.timesheets = a;
-      this.timesheets.sort(this.sortTS);
       this.timesheets.forEach(timesheet => {
         timesheet.date =  new Date(timesheet.year, timesheet.month, 1);
         timesheet.userObj = new User();
@@ -58,6 +84,12 @@ export class TimesheetComponent implements OnInit {
         }
       }
       );
+      this.filteredTimesheet = this.timesheets.filter(timesheet => 
+        (timesheet.month == this.filter.month ||this.filter.month =="")
+        &&(timesheet.year == this.filter.year ||this.filter.year =="")
+        &&(timesheet.user == this.filter.user ||this.filter.user =="")
+      );
+      this.filteredTimesheet.sort(this.sortTS);
       this.loader.timesheet = false;
     }
     );

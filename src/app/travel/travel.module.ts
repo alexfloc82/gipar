@@ -10,7 +10,7 @@ import {TravelDetailComponent} from './travel-detail.component';
 
 @NgModule({
   imports: [
-    CommonModule,CoreModule,
+    CommonModule,
     TravelRoutingModule, FormsModule, NgbModule.forRoot()
   ],
   declarations: [TravelComponent,TravelDetailComponent]

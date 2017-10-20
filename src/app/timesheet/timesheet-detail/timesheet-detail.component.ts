@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
@@ -41,6 +41,7 @@ export class TimesheetDetailComponent implements OnInit {
   constructor(private db: AngularFireDatabase,
     private route: ActivatedRoute,
     private location: Location,
+    private router: Router,
     public utils: UtilsService,
     public authService: AuthService,
     public messageService: MessageService) {
@@ -102,10 +103,11 @@ export class TimesheetDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['Timesheet']);
   }
 
   onSubmit() {
+    this.form.month = Number(this.form.month);
     //Update object in database
     if (this.timesheet) {
       this.timesheet.update(this.form).then(a => this.location.back()).catch(
