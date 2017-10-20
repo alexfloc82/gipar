@@ -8,9 +8,11 @@ import { TimesheetRoutingModule } from './timesheet-routing.module';
 import { TimesheetComponent } from './timesheet.component';
 import { TimesheetDetailComponent } from './timesheet-detail/timesheet-detail.component';
 
+import {DialogModule} from 'primeng/primeng';
+
 @NgModule({
   imports: [
-    CommonModule,FormsModule,
+    CommonModule,FormsModule,DialogModule,
     TimesheetRoutingModule, NgbModule.forRoot()
   ],
   declarations: [TimesheetComponent, TimesheetDetailComponent]

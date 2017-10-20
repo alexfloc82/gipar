@@ -36,6 +36,8 @@ export class TimesheetDetailComponent implements OnInit {
   today: Date;
   pms: any[];
   disable: boolean;
+  display: boolean = false;
+  newPM:any;
 
 
   constructor(private db: AngularFireDatabase,
@@ -45,6 +47,7 @@ export class TimesheetDetailComponent implements OnInit {
     public utils: UtilsService,
     public authService: AuthService,
     public messageService: MessageService) {
+      this.newPM={index:0,name:""};
     this.loader = true;
     this.db.list('/users').subscribe(a => this.users = a);
     this.authService.user.subscribe(user =>
@@ -119,18 +122,17 @@ export class TimesheetDetailComponent implements OnInit {
       let key = this.form.user + this.form.month + this.form.year;
       let obj = {};
       obj[key] = this.form;
-      firebase.database().ref('/timesheets/').once('value', snapshot =>{
-        if(snapshot.hasChild('/'+key))
-        {
+      firebase.database().ref('/timesheets/').once('value', snapshot => {
+        if (snapshot.hasChild('/' + key)) {
           this.messageService.sendMessage('Timesheet already exists', 'error');
         }
-        else{
+        else {
           this.db.object('/timesheets').update(obj).then(a => this.location.back()).catch(
             err => this.messageService.sendMessage(err.message, 'error')
           );
         }
       });
-     
+
     }
   }
 
@@ -165,6 +167,26 @@ export class TimesheetDetailComponent implements OnInit {
     this.db.list('/proposals/' + this.form.incurridos[index].proposal + '/pms').subscribe(
       pms => this.pms[index] = pms
     )
+  }
+
+  addPM(index:number,pm:string ) {
+    this.pms[index].push({value:pm});
+    this.db.object('/proposals/' + this.form.incurridos[index].proposal + '/pms')
+    .set(this.pms[index])
+    .then(a => {
+      this.form.incurridos[index].pm =pm;
+      this.newPM.name ="";
+      this.display = false}
+    )
+  }
+
+  //dialogue
+  showDialog(event: Event, index: number) {
+    if(event.target['value'] == "--ADD--")
+    {
+      this.newPM.index = index;
+      this.display = true;
+    }
   }
 
 

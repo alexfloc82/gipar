@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
@@ -34,6 +34,7 @@ export class TravelDetailComponent implements OnInit {
         private db: AngularFireDatabase,
         private route: ActivatedRoute,
         private location: Location,
+        private router:Router,
         private utils: UtilsService,
         public messageService: MessageService) {
         
@@ -70,7 +71,7 @@ export class TravelDetailComponent implements OnInit {
     }
 
     goBack(): void {
-        this.location.back();
+        this.router.navigate(['Travel']);
     }
 
     onSubmit() {
@@ -78,13 +79,13 @@ export class TravelDetailComponent implements OnInit {
         this.form.start = this.utils.convertNgbDateToISO(this.form.startDate);
         //Update object in database
         if (this.travel) {
-            this.travel.update(this.form).then(a => this.location.back()).catch(
+            this.travel.update(this.form).then(a => this.router.navigate(['Travel'])).catch(
                 err => this.messageService.sendMessage(err.message, 'error')
             );
         }
         //Create new object
         else {
-            this.db.list('/travels').push(this.form).then(a => this.location.back()).catch(
+            this.db.list('/travels').push(this.form).then(a => this.router.navigate(['Travel'])).catch(
                 err => this.messageService.sendMessage(err.message, 'error')
             );;
         }

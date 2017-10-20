@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AngularFireModule } from 'angularfire2';
@@ -30,7 +31,7 @@ import {InputSwitchModule} from 'primeng/primeng';
     AppComponent
   ],
   imports: [
-    BrowserModule, AppRouteModule, CoreModule,FormsModule, TimesheetModule, ProposalModule, SharedModule, HolidaysModule, GrowlModule,InputSwitchModule,
+    BrowserModule, BrowserAnimationsModule, AppRouteModule, CoreModule,FormsModule, TimesheetModule, ProposalModule, SharedModule, HolidaysModule, GrowlModule,InputSwitchModule,
     UserModule, AreaModule, HomeModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule

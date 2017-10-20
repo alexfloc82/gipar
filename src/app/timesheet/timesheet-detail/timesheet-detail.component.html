@@ -65,8 +65,9 @@
                   <option *ngFor="let proposal of proposals" [value]="proposal.$key">{{proposal.id}} - {{proposal.title}}</option>
                   </select>
                 </td>
-                <td><select class="form-control" [(ngModel)]="form.incurridos[i].pm">
+                <td><select class="form-control" [(ngModel)]="form.incurridos[i].pm" (change)="showDialog($event, i)">
                     <option *ngFor="let pm of pms[i]" [value]="pm.value">{{pm.value}}</option>
+                    <option value="--ADD--">Add PM</option>
                     </select></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q1"></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q2"></td>
@@ -79,3 +80,10 @@
     </div>
   </div>
 </div>
+<p-dialog header="Add new PM" [(visible)]="display" modal="true">
+    <div class="form-group form-inline">
+      <input type="text" class="form-control" placeholder="PM name" [(ngModel)]="newPM.name">
+      <input type="hidden" class="form-control" placeholder="PM name" [(ngModel)]="newPM.index">
+      <button class="btn btn-info ml-2" (click)="addPM(newPM.index, newPM.name)">Add</button>
+    </div>
+  </p-dialog>
