@@ -22,7 +22,7 @@ export class TimesheetComponent implements OnInit {
   items: any[];
   filteredTimesheet: any[];
   isAdmin: boolean;
-  filter:any;
+  filter: any;
   users: User[];
 
   constructor(
@@ -31,12 +31,12 @@ export class TimesheetComponent implements OnInit {
     private router: Router,
     private as: AdminService,
     private route: ActivatedRoute, ) {
-      
+
 
     this.today = new Date();
-    this.filter={user:"", year:this.today.getFullYear(), month:""};
+    this.filter = { user: "", year: this.today.getFullYear(), month: "" };
     this.today.setDate(this.today.getDate() - 45);
-    
+
     this.isAdmin = this.as.isChecked;
     this.db.list('/users').subscribe(users => this.users = users);
     this.getTimesheets(true);
@@ -49,46 +49,47 @@ export class TimesheetComponent implements OnInit {
     });
   }
 
-  private getTimesheets(userFilter?:boolean) {
+  private getTimesheets(userFilter?: boolean) {
 
-    this.authService.user.subscribe(user =>{
-      
-      if(userFilter){
-        this.filter.user=user.uid;
+    this.authService.user.subscribe(user => {
+
+      if (userFilter) {
+        this.filter.user = user.uid;
       }
 
-      let query={}
+      let query = {}
 
-      if(!this.isAdmin){
-        query ={orderByChild:"user",equalTo:user.uid}
+      if (!this.isAdmin) {
+        query = { orderByChild: "user", equalTo: user.uid }
       }
 
-    this.db.list('/timesheets', {query:query}).subscribe(a => {
-      this.loader = { 'user': true, 'timesheet': true };
-      this.timesheets = a;
-      this.timesheets.forEach(timesheet => {
-        timesheet.date =  new Date(timesheet.year, timesheet.month, 1);
-        timesheet.userObj = new User();
-        this.db.object('/users/' + timesheet.user).subscribe(a => { 
-          timesheet.userObj = a; 
-          this.loader.user = false; });
-        if (timesheet.incurridos) {
-          timesheet.incurridos.forEach(incurrido => {
-            incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
+      this.db.list('/timesheets', { query: query }).subscribe(a => {
+        this.loader = { 'user': true, 'timesheet': true };
+        this.timesheets = a;
+        this.timesheets.forEach(timesheet => {
+          timesheet.date = new Date(timesheet.year, timesheet.month, 1);
+          timesheet.userObj = new User();
+          this.db.object('/users/' + timesheet.user).subscribe(a => {
+            timesheet.userObj = a;
+            this.loader.user = false;
+          });
+          if (timesheet.incurridos) {
+            timesheet.incurridos.forEach(incurrido => {
+              incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
+            }
+            );
           }
-          );
         }
+        );
+        this.filteredTimesheet = this.timesheets.filter(timesheet =>
+          (timesheet.month == this.filter.month || this.filter.month == "")
+          && (timesheet.year == this.filter.year || this.filter.year == "")
+          && (timesheet.user == this.filter.user || this.filter.user == "")
+        );
+        this.filteredTimesheet.sort(this.sortTS);
+        this.loader.timesheet = false;
       }
       );
-      this.filteredTimesheet = this.timesheets.filter(timesheet => 
-        (timesheet.month == this.filter.month ||this.filter.month =="")
-        &&(timesheet.year == this.filter.year ||this.filter.year =="")
-        &&(timesheet.user == this.filter.user ||this.filter.user =="")
-      );
-      this.filteredTimesheet.sort(this.sortTS);
-      this.loader.timesheet = false;
-    }
-    );
     })
   }
 

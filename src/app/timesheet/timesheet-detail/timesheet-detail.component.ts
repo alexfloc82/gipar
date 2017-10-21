@@ -38,6 +38,8 @@ export class TimesheetDetailComponent implements OnInit {
   disable: boolean;
   display: boolean = false;
   newPM:any;
+  timeq1:number = 0;
+  timeq2:number = 0;
 
 
   constructor(private db: AngularFireDatabase,
@@ -71,6 +73,7 @@ export class TimesheetDetailComponent implements OnInit {
           this.form = new Timesheet();
           this.form.month = this.today.getMonth();
           this.form.year = this.today.getFullYear();
+          this.calculateTime();
           this.authService.userProfile.subscribe(user => {
             this.db.object('/users/' + user.$key).subscribe(user => {
               this.selectedUser = user;
@@ -87,6 +90,7 @@ export class TimesheetDetailComponent implements OnInit {
           this.timesheet.subscribe(
             a => {
               this.form = a;
+              this.calculateTime();
               this.db.object('/users/' + a.user).subscribe(b => this.selectedUser = b);
 
               if (a.incurridos) {
@@ -189,5 +193,9 @@ export class TimesheetDetailComponent implements OnInit {
     }
   }
 
+  calculateTime(){
+    this.timeq1 = this.utils.getTimeRange(new Date(this.form.year,this.form.month,1),new Date(this.form.year,this.form.month,15));
+    this.timeq2 = this.utils.getTimeRange(new Date(this.form.year,this.form.month,16),new Date(this.form.year,Number(this.form.month)+1,0));
+  }
 
 }
