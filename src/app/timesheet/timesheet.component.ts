@@ -73,11 +73,7 @@ export class TimesheetComponent implements OnInit {
           timesheet.userObj = a; 
           this.loader.user = false; });
         if (timesheet.incurridos) {
-          timesheet.totalq1 = 0;
-          timesheet.totalq2 = 0;
           timesheet.incurridos.forEach(incurrido => {
-            timesheet.totalq1 = timesheet.totalq1 + Number(incurrido.q1);
-            timesheet.totalq2 = timesheet.totalq2 + Number(incurrido.q2);
             incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
           }
           );

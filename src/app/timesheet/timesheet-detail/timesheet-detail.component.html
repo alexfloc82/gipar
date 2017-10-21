@@ -73,6 +73,12 @@
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q2"></td>
                 <td><button class="btn btn-outline-danger" (click)="deleteIncurrido(i)"><span class="fa fa-trash"></span></button></td>
               </tr>
+              <tr>
+                <th>Total</th>
+                <th></th>
+                <th>{{form.incurridos | incurrido:'q1'}} of </th>
+                <th>{{form.incurridos | incurrido:'q2'}} of </th>
+              </tr>
             </tbody>
           </table>
         </div>

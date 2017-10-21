@@ -57,6 +57,8 @@ export class Incurrido{
 	q1: number;
 	q2: number;
 	constructor() { 
+		this.q1=0;
+		this.q2=0;
 	}
 
 }

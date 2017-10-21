@@ -7,12 +7,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TimesheetRoutingModule } from './timesheet-routing.module';
 import { TimesheetComponent } from './timesheet.component';
 import { TimesheetDetailComponent } from './timesheet-detail/timesheet-detail.component';
+import {SharedModule} from '../shared/shared.module';
 
 import {DialogModule} from 'primeng/primeng';
 
 @NgModule({
   imports: [
-    CommonModule,FormsModule,DialogModule,
+    CommonModule,FormsModule,DialogModule,SharedModule,
     TimesheetRoutingModule, NgbModule.forRoot()
   ],
   declarations: [TimesheetComponent, TimesheetDetailComponent]
