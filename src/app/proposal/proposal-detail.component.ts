@@ -71,6 +71,9 @@ export class ProposalDetailComponent implements OnInit {
               if (this.form.estimates) {
                 this.selectedResources = new Array(this.form.estimates.length);
                 this.form.estimates.forEach((a, index) => {
+                  this.db.list('/timesheets',{query:{orderByChild:"user",equalTo:a.user}}).subscribe(timesheets =>{
+                    a['charge'] = this.calculateCharge(timesheets, param.get('id'));
+                  })
                   this.db.object('/users/' + a.user).subscribe(c =>
                   { this.selectedResources[index] = c })
                 }
@@ -147,4 +150,21 @@ export class ProposalDetailComponent implements OnInit {
     this.form.pms.splice(index, 1);
   }
 
+  calculateCharge(timesheets: Timesheet[], proposal:string):number{
+      let time = 0;
+      timesheets.forEach(timesheet => {
+        timesheet.incurridos.forEach(incurrido => {
+          if(incurrido.proposal == proposal){
+            time = time + Number(incurrido.q1) + Number(incurrido.q2);
+          }          
+        });
+      });
+      return time;
+  }
+
+  delete() {
+    this.proposal.remove().then(a => this.location.back())
+      .catch(err => this.messageService.sendMessage(err.message, 'error'))
+      .then(a => this.messageService.sendMessage('Proposal has been deleted', 'success'))
+  }
 }

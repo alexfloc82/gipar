@@ -117,7 +117,7 @@ export class TimesheetDetailComponent implements OnInit {
     this.form.month = Number(this.form.month);
     //Update object in database
     if (this.timesheet) {
-      this.timesheet.update(this.form).then(a => this.location.back()).catch(
+      this.timesheet.update(this.form).then(a => this.router.navigate(['Timesheet'])).catch(
         err => this.messageService.sendMessage(err.message, 'error')
       );
     }
@@ -131,7 +131,7 @@ export class TimesheetDetailComponent implements OnInit {
           this.messageService.sendMessage('Timesheet already exists', 'error');
         }
         else {
-          this.db.object('/timesheets').update(obj).then(a => this.location.back()).catch(
+          this.db.object('/timesheets').update(obj).then(a => this.router.navigate(['Timesheet'])).catch(
             err => this.messageService.sendMessage(err.message, 'error')
           );
         }
@@ -141,7 +141,7 @@ export class TimesheetDetailComponent implements OnInit {
   }
 
   delete() {
-    this.timesheet.remove().then(a => this.location.back())
+    this.timesheet.remove().then(a => this.router.navigate(['Timesheet']))
       .catch(err => this.messageService.sendMessage(err.message, 'error'))
       .then(a => this.messageService.sendMessage('Timesheet has been deleted', 'success'))
   }

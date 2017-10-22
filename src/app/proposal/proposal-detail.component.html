@@ -3,8 +3,9 @@
 </div>
 <div class="container p-3" *ngIf="!loader">
   <div class="form-row mb-3">
-    <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSubmit()"><span class="fa fa-save" aria-hidden="true" ></span> Save</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSubmit()" *ngIf="!form.closed"><span class="fa fa-save" aria-hidden="true" ></span> Save</button>
     <button class="btn btn-outline-warning my-2 my-sm-0" (click)="goBack()"><span class="fa fa-undo" aria-hidden="true"></span> Undo</button>
+    <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right ml-2" (click)="delete()" *ngIf="proposal && !form.closed">Delete</button>
     <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right" (click)="toggleClose(true)" *ngIf="proposal && !form.closed">Close Proposal</button>
     <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right" (click)="toggleClose(false)" *ngIf="proposal && form.closed">Re-Open</button>
   </div>
@@ -20,82 +21,87 @@
 
         <label>Title</label>
         <div class="form-group">
-          <input [(ngModel)]="form.title" type="text" class="form-control" name="title">
+          <input [(ngModel)]="form.title" type="text" class="form-control" name="title" [disabled]="form.closed">
         </div>
 
         <label>Responsible</label>
         <div class="form-group">
           <input type="text" name="selectedUser" class="form-control" [ngbTypeahead]="usearch" [(ngModel)]="selectedUser" [inputFormatter]="uformatter"
-            [resultFormatter]="uformatter" (selectItem)="selectUser($event)">
+            [resultFormatter]="uformatter" (selectItem)="selectUser($event)" [disabled]="form.closed">
         </div>
 
         <label>Area</label>
         <div class="form-group">
-          <select [(ngModel)]="form.area" class="form-control" name="area">
+          <select [(ngModel)]="form.area" class="form-control" name="area" [disabled]="form.closed">
               <option *ngFor="let area of areas" [value]="area.key">{{area.value}}</option>
           </select>
         </div>
 
         <label>Comments</label>
         <div class="form-group">
-          <textarea [(ngModel)]="form.comments" rows="3" class="form-control"></textarea>
+          <textarea [(ngModel)]="form.comments" rows="3" class="form-control" [disabled]="form.closed"></textarea>
         </div>
       </div>
       <div class="col-md-3">
         <label>From: {{form.start | date:'dd/MM/yyyy'}}</label>
         <div class="form-group">
-          <ngb-datepicker #ds [(ngModel)]="form.startDate" [startDate]="{year:form.startDate.year, month:form.startDate.month}" (click)="form.start = utils.convertNgbDateToISO(form.startDate)"></ngb-datepicker>
+          <ngb-datepicker #ds [(ngModel)]="form.startDate" [startDate]="{year:form.startDate.year, month:form.startDate.month}" (click)="form.start = utils.convertNgbDateToISO(form.startDate)" [disabled]="form.closed"></ngb-datepicker>
         </div>
       </div>
       <div class="col-md-3">
         <label>To:  {{form.end | date:'dd/MM/yyyy'}}</label>
         <div class="form-group">
-          <ngb-datepicker #df [(ngModel)]="form.endDate" [startDate]="{year:form.endDate.year, month:form.endDate.month}" (click)="form.end = utils.convertNgbDateToISO(form.endDate)"></ngb-datepicker>
+          <ngb-datepicker #df [(ngModel)]="form.endDate" [startDate]="{year:form.endDate.year, month:form.endDate.month}" (click)="form.end = utils.convertNgbDateToISO(form.endDate)" [disabled]="form.closed"></ngb-datepicker>
         </div>
       </div>
 
     </div>
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-12">
         <h2 class="text-info">Estimates</h2>
         <label>Work hours</label>
-        <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" (click)="addEstimates()">Add</span>
+        <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" *ngIf="!form.closed" (click)="addEstimates()">Add</span>
         <div class="mt-3">
           <table class="table">
             <thead>
               <th>User</th>
               <th>Hours</th>
-              <th></th>
+              <th class="text-center">Actual</th>
+              <th *ngIf="!form.closed"></th>
             </thead>
             <tbody>
               <tr *ngFor="let estimate of form.estimates;let i = index;">
                 <td><input type="text" class="form-control" [ngbTypeahead]="usearch" [(ngModel)]="selectedResources[i]" [inputFormatter]="uformatter"
-                    [resultFormatter]="uformatter" (selectItem)="selectResource($event, i)"></td>
-                <td><input [(ngModel)]="estimate.hours" type="text" class="form-control"></td>
-                <td><button class="btn btn-outline-danger" (click)="deleteResource(i)"><span class="fa fa-trash"></span></button></td>
+                    [resultFormatter]="uformatter" (selectItem)="selectResource($event, i)" [disabled]="form.closed"></td>
+                <td><input [(ngModel)]="estimate.hours" type="text" class="form-control" [disabled]="form.closed"></td>
+                <td class="text-white text-center"
+                [class.bg-danger]="estimate.charge > estimate.hours" 
+                [class.bg-warning]="estimate.charge > estimate.hours*80/100 && estimate.charge <= estimate.hours"
+                [class.bg-success]="estimate.charge <= estimate.hours*80/100">{{estimate.charge}}</td>
+                <td *ngIf="!form.closed"><button class="btn btn-outline-danger" (click)="deleteResource(i)"><span class="fa fa-trash"></span></button></td>
               </tr>
             </tbody>
           </table>
         </div>
         <label>Travel Expenses (in €)</label>
         <div class="form-group">
-          <input [(ngModel)]="form.travels" type="text" class="form-control" name="expenses">
+          <input [(ngModel)]="form.travels" type="text" class="form-control" name="expenses" [disabled]="form.closed">
         </div>
       </div>
-      <div class="col-md-4">
-        <h2 class="text-info">PMs</h2>
-        <label>Releases</label>
-        <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" (click)="addRelease()">Add</span>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <h2 class="text-info">PMs <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" *ngIf="!form.closed" (click)="addRelease()">Add</span></h2>
         <div class="mt-3">
           <table class="table">
             <thead>
               <th>PM</th>
-              <th></th>
+              <th *ngIf="!form.closed"></th>
             </thead>
             <tbody>
               <tr *ngFor="let release of form.pms;let i = index;">
-                <td><input [(ngModel)]="release.value" type="text" class="form-control"></td>
-                <td><button class="btn btn-outline-danger" (click)="deleteRelease(i)"><span class="fa fa-trash"></span></button></td>
+                <td><input [(ngModel)]="release.value" type="text" class="form-control" [disabled]="form.closed"></td>
+                <td *ngIf="!form.closed"><button class="btn btn-outline-danger" (click)="deleteRelease(i)"><span class="fa fa-trash"></span></button></td>
               </tr>
             </tbody>
           </table>

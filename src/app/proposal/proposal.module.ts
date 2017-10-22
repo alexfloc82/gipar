@@ -6,7 +6,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProposalRoutingModule } from './proposal-routing.module';
 import { ProposalComponent } from './proposal.component';
-import { ProposalService } from './proposal.service';
 import { ProposalDetailComponent } from './proposal-detail.component';
 
 @NgModule({
@@ -15,6 +14,6 @@ import { ProposalDetailComponent } from './proposal-detail.component';
     ProposalRoutingModule, FormsModule, NgbModule.forRoot()
   ],
   declarations: [ProposalComponent, ProposalDetailComponent],
-  providers: [ProposalService]
+  providers: []
 })
 export class ProposalModule { }
