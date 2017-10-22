@@ -21,7 +21,7 @@
           <div class="form-group" *ngIf="selectedItem != 'Coverage'">
             <label>Month:</label>
             <select class="form-control" [(ngModel)]="query.month" (change)="onMonthSelect()">
-                  <option></option>
+                  <option value="-1"></option>
                   <option value="0">January</option>
                   <option value="1">February</option>
                   <option value="2">March</option>

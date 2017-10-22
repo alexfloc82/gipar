@@ -1,3 +1,17 @@
-<p>
-  area-report works!
-</p>
+<p-dataTable #dt [value]="times" [immutable]="false" [rows]="50" [paginator]="true" exportFilename="data" >
+    <p-header>
+        <div class="ui-helper-clearfix">
+            <button type="button" pButton icon="fa-file-o" iconPos="left" label="All Data" (click)="dt.exportCSV()" style="float:left"></button>
+         </div>
+    </p-header>
+    <p-column field="month" header="Month" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="year" header="Year" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="adsuser" header="User" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="lastname" header="Last Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="id" header="Proposal" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="pm" header="PM" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="q1" header="Q1" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="q2" header="Q2" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="total" header="Total" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+</p-dataTable>
