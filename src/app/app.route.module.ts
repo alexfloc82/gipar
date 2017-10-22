@@ -8,6 +8,7 @@ export const routes: Routes = [
   { path: 'Timesheet',  loadChildren: 'app/timesheet/timesheet.module#TimesheetModule'},
   { path: 'Timeoff',  loadChildren: 'app/holidays/holidays.module#HolidaysModule'},
   { path: 'Travel',  loadChildren: 'app/travel/travel.module#TravelModule'},
+  { path: 'Area',  loadChildren: 'app/area/area.module#AreaModule'},
   { path: 'User',  loadChildren: 'app/user/user.module#UserModule'}
 ];
 

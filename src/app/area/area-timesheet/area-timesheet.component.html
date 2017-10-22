@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Last Name</th>
+    <th>Q1 (hours)</th>
+    <th>Q2 (hours)</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.adsuser}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.lastname}}</td>
+      <td>{{user.q1}}</td>
+      <td>{{user.q2}}</td>
+    </tr>
+  </tbody>
+</table>

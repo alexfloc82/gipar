@@ -45,13 +45,15 @@
       <div class="col-md-3">
         <label>From: {{form.start | date:'dd/MM/yyyy'}}</label>
         <div class="form-group">
-          <ngb-datepicker #ds [(ngModel)]="form.startDate" [startDate]="{year:form.startDate.year, month:form.startDate.month}" (click)="form.start = utils.convertNgbDateToISO(form.startDate)" [disabled]="form.closed"></ngb-datepicker>
+          <ngb-datepicker #ds [(ngModel)]="form.startDate" [startDate]="{year:form.startDate.year, month:form.startDate.month}" (click)="form.start = utils.convertNgbDateToISO(form.startDate)"
+            [disabled]="form.closed"></ngb-datepicker>
         </div>
       </div>
       <div class="col-md-3">
         <label>To:  {{form.end | date:'dd/MM/yyyy'}}</label>
         <div class="form-group">
-          <ngb-datepicker #df [(ngModel)]="form.endDate" [startDate]="{year:form.endDate.year, month:form.endDate.month}" (click)="form.end = utils.convertNgbDateToISO(form.endDate)" [disabled]="form.closed"></ngb-datepicker>
+          <ngb-datepicker #df [(ngModel)]="form.endDate" [startDate]="{year:form.endDate.year, month:form.endDate.month}" (click)="form.end = utils.convertNgbDateToISO(form.endDate)"
+            [disabled]="form.closed"></ngb-datepicker>
         </div>
       </div>
 
@@ -65,6 +67,7 @@
           <table class="table">
             <thead>
               <th>User</th>
+              <th>Year</th>
               <th>Hours</th>
               <th class="text-center">Actual</th>
               <th *ngIf="!form.closed"></th>
@@ -73,11 +76,13 @@
               <tr *ngFor="let estimate of form.estimates;let i = index;">
                 <td><input type="text" class="form-control" [ngbTypeahead]="usearch" [(ngModel)]="selectedResources[i]" [inputFormatter]="uformatter"
                     [resultFormatter]="uformatter" (selectItem)="selectResource($event, i)" [disabled]="form.closed"></td>
+                <td><select [(ngModel)]="estimate.year" class="form-control" [disabled]="form.closed"><option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                      <option value="2018">2019</option>
+                      <option value="2018">2020</option></select></td>
                 <td><input [(ngModel)]="estimate.hours" type="text" class="form-control" [disabled]="form.closed"></td>
-                <td class="text-white text-center"
-                [class.bg-danger]="estimate.charge > estimate.hours" 
-                [class.bg-warning]="estimate.charge > estimate.hours*80/100 && estimate.charge <= estimate.hours"
-                [class.bg-success]="estimate.charge <= estimate.hours*80/100">{{estimate.charge}}</td>
+                <td class="text-white text-center" [class.bg-danger]="estimate.charge > estimate.hours" [class.bg-warning]="estimate.charge > estimate.hours*80/100 && estimate.charge <= estimate.hours"
+                  [class.bg-success]="estimate.charge <= estimate.hours*80/100">{{estimate.charge}}</td>
                 <td *ngIf="!form.closed"><button class="btn btn-outline-danger" (click)="deleteResource(i)"><span class="fa fa-trash"></span></button></td>
               </tr>
             </tbody>

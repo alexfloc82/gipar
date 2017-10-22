@@ -1,0 +1,16 @@
+<table class="table">
+  <thead>
+      <th>ID</th>
+    <th>Name</th>
+    <th>Last Name</th>
+    <th>Coverage (hours)</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.adsuser}}</td>
+      <td>{{user.name}}</td>
+        <td>{{user.lastname}}</td>
+        <td>{{user.coverage}}</td>
+    </tr>
+  </tbody>
+</table>

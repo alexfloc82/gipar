@@ -72,7 +72,7 @@ export class ProposalDetailComponent implements OnInit {
                 this.selectedResources = new Array(this.form.estimates.length);
                 this.form.estimates.forEach((a, index) => {
                   this.db.list('/timesheets',{query:{orderByChild:"user",equalTo:a.user}}).subscribe(timesheets =>{
-                    a['charge'] = this.calculateCharge(timesheets, param.get('id'));
+                    a['charge'] = this.calculateCharge(timesheets, param.get('id'), a.year);
                   })
                   this.db.object('/users/' + a.user).subscribe(c =>
                   { this.selectedResources[index] = c })
@@ -118,7 +118,7 @@ export class ProposalDetailComponent implements OnInit {
     if (!this.form.estimates) {
       this.form.estimates = [];
     }
-    this.form.estimates.push({ user: '', hours: 0 })
+    this.form.estimates.push({ user: '', hours: 0, year: new Date().getFullYear() })
   }
   //Uer typeahead
   usearch = (text$: Observable<string>) =>
@@ -150,11 +150,11 @@ export class ProposalDetailComponent implements OnInit {
     this.form.pms.splice(index, 1);
   }
 
-  calculateCharge(timesheets: Timesheet[], proposal:string):number{
+  calculateCharge(timesheets: Timesheet[], proposal:string, year:number):number{
       let time = 0;
       timesheets.forEach(timesheet => {
         timesheet.incurridos.forEach(incurrido => {
-          if(incurrido.proposal == proposal){
+          if(incurrido.proposal == proposal && timesheet.year==year){
             time = time + Number(incurrido.q1) + Number(incurrido.q2);
           }          
         });

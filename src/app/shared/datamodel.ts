@@ -32,6 +32,7 @@ export class Proposal {
 export class Estimate {
 	user: string;
 	hours: number;
+	year:number;
 
 	constructor() { }
 }
@@ -118,6 +119,7 @@ export class User {
 	lastname: string;
 	area: string;
 	role: string;
+	coverage: number=0;
 
 	constructor() { }
 }

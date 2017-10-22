@@ -1,3 +1,56 @@
-<p>
-  area works!
-</p>
+<div class="container text-center pt-5" *ngIf="loader">
+  <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
+</div>
+<div class="container-fluid p-3" *ngIf="!loader">
+  <div class="row">
+    <div class="col-md-2">
+      <div class="sticky-top">
+        <div class="list-group mb-2" id="list-tab" role="tablist">
+          <button class="list-group-item list-group-item-action" [class.active]="selectedItem == 'Coverage'" (click)="selectItem('Coverage')" routerLink="coverage" >Coverage</button>
+          <button class="list-group-item list-group-item-action" [class.active]="selectedItem == 'Report'" (click)="selectItem('Report')" routerLink="report" >Report</button>
+          <button class="list-group-item list-group-item-action" [class.active]="selectedItem == 'Timesheets'" (click)="selectItem('Timesheets')"routerLink="timesheet" >Timesheets</button>
+        </div>
+        <div class="border rounded p-2">
+          <h5 class="text-info">Filtros</h5>
+          <div class="form-group">
+            <label>Area:</label>
+            <select class="form-control" [(ngModel)]="query.area" (change)="onAreaSelect()">
+                  <option *ngFor="let area of areas" [value]= "area.$key">{{area.name}}</option>
+                </select>
+          </div>
+          <div class="form-group" *ngIf="selectedItem != 'Coverage'">
+            <label>Month:</label>
+            <select class="form-control" [(ngModel)]="query.month" (change)="onMonthSelect()">
+                  <option></option>
+                  <option value="0">January</option>
+                  <option value="1">February</option>
+                  <option value="2">March</option>
+                  <option value="3">April</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">August</option>
+                  <option value="8">September</option>
+                  <option value="9">October</option>
+                  <option value="10">November</option>
+                  <option value="11">December</option>
+                </select>
+          </div>
+          <div class="form-group">
+            <label>Year:</label>
+            <select class="form-control" [(ngModel)]="query.year" (change)="onYearSelect()">
+                  <option></option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2018">2019</option>
+                  <option value="2018">2020</option>
+                </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
