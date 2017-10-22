@@ -66,6 +66,7 @@ export class HolidaysComponent implements OnInit {
       this.loader = { "user": true, "holiday": true };
       this.db.list('/timeoffs', { query: query }).subscribe(a => {
         this.holidays = a;
+        if(this.holidays.length == 0){this.loader = { "user": false, "holiday": false };}
         this.holidays.forEach(holiday => {
           holiday.holidayObj = new Holidays();
           holiday.userObj = new User();

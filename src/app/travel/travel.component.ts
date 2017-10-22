@@ -67,6 +67,7 @@ export class TravelComponent implements OnInit {
       this.loader = { "user": true, "travel": true };
       this.db.list('/travels', { query: query }).subscribe(a => {
         this.travels = a;
+        if(this.travels.length == 0){this.loader = { "user": false, "travel": false };}
         this.travels.forEach(travel => {
           travel.userObj = new User();
           travel.proposalObj = new Proposal();
