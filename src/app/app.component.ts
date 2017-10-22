@@ -4,6 +4,7 @@ import { AuthService } from './core/auth/auth.service';
 import { MessageService } from './core/message/message.service';
 import { Router } from '@angular/router';
 import { AdminService } from './core/utils/admin.service';
+import {Message} from 'primeng/primeng';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent implements OnDestroy {
   message = { text: '', type: 'success' };
   subscription: Subscription;
   checked: boolean = false;
+  msgs: Message[] = [];
 
 
   constructor(
