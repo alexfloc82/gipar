@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../core/auth/auth.service';
+import { User } from '../shared/datamodel';
 
 @Component({
   selector: 'app-user',
@@ -15,18 +16,21 @@ export class UserComponent implements OnInit {
   filteredUsers: any[];
 
   constructor(
-    db: AngularFireDatabase, 
+    private db: AngularFireDatabase, 
     private router: Router,
     private route: ActivatedRoute,) {
-    this.loader=true;
-    db.list('/users').subscribe(a => {
-      this.users = a; 
-      this.filteredUsers = a; 
-      this.loader=false;});
+   
+
   }
 
   ngOnInit() {
-    
+    this.loader=true;
+    this.db.list('/users').subscribe(a => {
+      this.users = a; 
+      this.users.forEach(user => this.getArea(user));
+      this.users.sort(this.sortBylastName);
+      this.filteredUsers = a; 
+      this.loader=false;});
   }
 
   gotoDetail(id: string): void {
@@ -39,6 +43,14 @@ export class UserComponent implements OnInit {
         user.name.toLowerCase().indexOf(value['target'].value.toLowerCase()) > -1 ||
         user.email.toLowerCase().indexOf(value['target'].value.toLowerCase()) > -1 ||
         user.lastname.toLowerCase().indexOf(value['target'].value.toLowerCase()) > -1)
+  }
+
+  getArea(user : User){
+    this.db.object('/areas/'+user.area).subscribe(area => user['areaName']=area.name);
+  }
+
+  sortBylastName(p1:User, p2:User){
+    return p1.lastname.toLocaleLowerCase() > p2.lastname.toLocaleLowerCase()? 1:-1;
   }
 
 }

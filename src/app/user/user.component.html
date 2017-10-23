@@ -12,6 +12,7 @@
       <th>User</th>
       <th>First Name</th>
       <th>Last Name</th>
+      <th>Area</th>
       <th>email</th>
       <th>Role</th>
     </thead>
@@ -20,6 +21,7 @@
         <td><button class="btn-link" (click)="gotoDetail(user.$key)">{{user.adsuser}}</button></td>
         <td>{{user.name}}</td>
         <td>{{user.lastname}}</td>
+        <td>{{user.areaName}}</td>
         <td>{{user.email}}</td>
         <td>{{user.role}}</td>
       </tr>

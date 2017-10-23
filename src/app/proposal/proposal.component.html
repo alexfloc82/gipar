@@ -13,49 +13,45 @@
       </div>
       <span class="btn btn-outline-info my-2 my-sm-0" (click)="getProposals()">Apply filter</span>
     </div>
-    <div class="col-8 m-3 p-2 border rounded">
-      <h2 class="text-primary">In progress</h2>
-      <div class="row p-1">
-        <div class="col-md-4 mt-2" *ngFor="let proposal of inprogressProposals">
-          <div *ngIf="proposal.$key" class="card">
-            <div class="card-header">
-              {{proposal.id}}
-            </div>
-            <div class="card-block">
-              <h4 class="card-title">{{proposal.title}}</h4>
-              <p class="card-text">From: {{proposal.start | date:'dd/MM/yyyy'}}</p>
-              <p class="card-text">To: {{proposal.end | date:'dd/MM/yyyy'}}</p>
-              <button class="btn btn-info is-pointer" (click)="gotoDetail(proposal.$key)">Detail</button>
-            </div>
-          </div>
-          <div *ngIf="!proposal.$key" class="card">
-            <div class="card-header">
-              Add New
-            </div>
-            <div class="card-block text-center">
-              <div><span class="fa fa-file-text-o fa-5x btn-link is-pointer" (click)="gotoDetail('-')"></span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="col-8 m-3 p-2">
+      <h2 class="text-primary">In progress <span class="btn btn-outline-success my-2 my-sm-0 float-sm-right" (click)="gotoDetail('-')">New Proposal</span></h2>
+      <table class="table">
+        <thead>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Area</th>
+          <th>From</th>
+          <th>To</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let proposal of inprogressProposals">
+            <td><button class="btn-link" (click)="gotoDetail(proposal.$key)">{{proposal.id}}</button></td>
+            <td>{{proposal.title}}</td>
+            <td>{{proposal.areaName}}</td>
+            <td>{{proposal.start | date:'dd/MM/yyyy'}}</td>
+            <td>{{proposal.end | date:'dd/MM/yyyy'}}</td>        
+          </tr>
+        </tbody>
+      </table>
       <h2 class="text-primary mt-3">Closed</h2>
-      <div>
-        <div class="row p-1">
-          <div class="col-md-4 mt-2" *ngFor="let proposal of closedProposals">
-            <div class="card">
-              <div class="card-header">
-                {{proposal.id}}
-              </div>
-              <div class="card-block">
-                <h4 class="card-title">{{proposal.title}}</h4>
-                <p class="card-text">Starts: {{proposal.start | date:'dd/MM/yyyy'}}</p>
-                <p class="card-text">Ends: {{proposal.end | date:'dd/MM/yyyy'}}</p>
-                <button class="btn btn-info" (click)="gotoDetail(proposal.$key)">Detail</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <table class="table">
+        <thead>
+          <th>Id</th>
+          <th>Title</th>
+          <th>Area</th>
+          <th>From</th>
+          <th>To</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let proposal of closedProposals">
+            <td><button class="btn-link" (click)="gotoDetail(proposal.$key)">{{proposal.id}}</button></td>
+            <td>{{proposal.title}}</td>
+            <td>{{proposal.areaName}}</td>
+            <td>{{proposal.start | date:'dd/MM/yyyy'}}</td>
+            <td>{{proposal.end | date:'dd/MM/yyyy'}}</td>        
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

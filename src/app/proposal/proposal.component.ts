@@ -37,6 +37,8 @@ export class ProposalComponent implements OnInit {
     
     this.db.list('/proposals').subscribe(a => {
     this.proposals = a;
+    this.proposals.forEach(proposal => this.getArea(proposal));
+    this.proposals.sort(this.sortById);
     this.closedProposals = this.proposals.filter(proposal => proposal.closed && (proposal.area == this.filter.area || this.filter.area==""));
     this.inprogressProposals = this.proposals.filter(proposal => !proposal.closed && (proposal.area == this.filter.area || this.filter.area==""));
     this.inprogressProposals.push({});
@@ -45,6 +47,14 @@ export class ProposalComponent implements OnInit {
 
   gotoDetail(id: string): void {
     this.router.navigate([id], { relativeTo: this.route });
+  }
+
+  getArea(proposal : Proposal){
+    this.db.object('/areas/'+proposal.area).subscribe(area => proposal['areaName']=area.name);
+  }
+
+  sortById(p1:Proposal, p2:Proposal){
+    return p1.id.toLocaleLowerCase() > p2.id.toLocaleLowerCase()? 1:-1;
   }
 
 }
