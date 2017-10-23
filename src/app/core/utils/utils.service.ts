@@ -30,7 +30,7 @@ export class UtilsService {
         var nextDay = day1;
         while (nextDay <= day2) {
             var theday = new Date();
-            theday = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getUTCDate()+1);
+            theday = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate());
             range.push(theday);
             nextDay.setDate(nextDay.getDate() + 1);
         }
