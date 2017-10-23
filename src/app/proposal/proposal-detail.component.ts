@@ -53,6 +53,7 @@ export class ProposalDetailComponent implements OnInit {
         if (param.get('id') == '-') {
           let now = new Date().toISOString();
           this.form = new Proposal(now, this.utils.convertISOToNgbDate(now));
+          this.form.closed=false;
           this.form.estimates = [];
           this.selectedResources = [];
           this.authService.userProfile.subscribe(user => 

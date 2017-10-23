@@ -53,7 +53,7 @@ export class TimesheetDetailComponent implements OnInit {
     this.loader = true;
     this.db.list('/users').subscribe(a => this.users = a);
     this.authService.user.subscribe(user =>
-      this.db.list('/proposals').subscribe(a => this.proposals = a.filter(proposal => {
+      this.db.list('/proposals',{query:{orderByChild:"closed",equalTo:false}}).subscribe(a => this.proposals = a.filter(proposal => {
         if (!proposal.estimates) { return false; }
         return proposal.estimates.filter(estimate => { return estimate.user == user.uid; }).length > 0 ? true : false;
       }
