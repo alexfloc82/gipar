@@ -4,7 +4,7 @@
 <div class="container p-3" *ngIf="!loader">
   <div class="form-row mb-3">
     <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSubmit()" *ngIf="!form.closed"><span class="fa fa-save" aria-hidden="true" ></span> Save</button>
-    <button class="btn btn-outline-warning my-2 my-sm-0" (click)="goBack()"><span class="fa fa-undo" aria-hidden="true"></span> Undo</button>
+    <button class="btn btn-outline-warning my-2 my-sm-0" (click)="goBack()"><span class="fa fa-undo" aria-hidden="true"></span> Back</button>
     <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right ml-2" (click)="delete()" *ngIf="proposal && !form.closed">Delete</button>
     <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right" (click)="toggleClose(true)" *ngIf="proposal && !form.closed">Close Proposal</button>
     <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right" (click)="toggleClose(false)" *ngIf="proposal && form.closed">Re-Open</button>

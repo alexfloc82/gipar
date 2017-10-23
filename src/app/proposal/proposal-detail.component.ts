@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
@@ -34,6 +34,7 @@ export class ProposalDetailComponent implements OnInit {
   constructor(
     private db: AngularFireDatabase,
     private route: ActivatedRoute,
+    private router:Router,
     private location: Location,
     public utils: UtilsService,
     public authService: AuthService,
@@ -90,7 +91,7 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['Proposal']);
   }
 
   onSubmit() {
@@ -98,20 +99,23 @@ export class ProposalDetailComponent implements OnInit {
     this.form.end = this.utils.convertNgbDateToISO(this.form.endDate);
     //Update object in database
     if (this.proposal) {
-      this.proposal.update(this.form).then(a => this.location.back()).catch(
+      this.proposal.update(this.form).then(a => this.messageService.sendMessage('Proposal has been saved successfully', 'success')).catch(
         err => this.messageService.sendMessage(err.message, 'error')
       );
     }
     //Create new object
     else {
-      this.db.list('/proposals').push(this.form).then(a => this.location.back()).catch(
+      this.db.list('/proposals').push(this.form).then(a => {
+        this.messageService.sendMessage('Proposal has been saved successfully', 'success');
+        this.router.navigate(['Proposal', a.key]);
+      }).catch(
         err => this.messageService.sendMessage(err.message, 'error')
       );;
     }
   }
 
   toggleClose(isClosed: boolean) {
-    this.proposal.update({ closed: isClosed }).then(a => this.location.back()).catch(
+    this.proposal.update({ closed: isClosed }).then(a => this.router.navigate(['Proposal'])).catch(
       err => this.messageService.sendMessage(err.message, 'error')
     );
   }
@@ -165,7 +169,7 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   delete() {
-    this.proposal.remove().then(a => this.location.back())
+    this.proposal.remove().then(a => this.router.navigate(['Proposal']))
       .catch(err => this.messageService.sendMessage(err.message, 'error'))
       .then(a => this.messageService.sendMessage('Proposal has been deleted', 'success'))
   }

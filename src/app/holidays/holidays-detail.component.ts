@@ -4,7 +4,7 @@ import { debounceTime } from 'rxjs/operator/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operator/distinctUntilChanged';
 
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormGroup } from '@angular/forms';
 
@@ -34,6 +34,7 @@ export class HolidaysDetailComponent implements OnInit {
     constructor(
         private db: AngularFireDatabase,
         private route: ActivatedRoute,
+        private router:Router,
         private location: Location,
         private utils: UtilsService,
         public messageService: MessageService) {
@@ -70,7 +71,7 @@ export class HolidaysDetailComponent implements OnInit {
     }
 
     goBack(): void {
-        this.location.back();
+        this.router.navigate(['Timeoff']);
     }
 
     onSubmit() {                
@@ -90,13 +91,13 @@ export class HolidaysDetailComponent implements OnInit {
             this.form.from = this.utils.convertNgbDateToISO(this.form.fromDate);
             //Update object in database
             if (this.holiday) {
-                this.holiday.update(this.form).then(a => this.location.back()).catch(
+                this.holiday.update(this.form).then(a => this.router.navigate(['Timeoff'])).catch(
                     err => this.messageService.sendMessage(err.message, 'error')
                 );
             }
             //Create new object
             else {
-                this.db.list('/timeoffs').push(this.form).then(a => this.location.back()). catch(
+                this.db.list('/timeoffs').push(this.form).then(a => this.router.navigate(['Timeoff'])). catch(
                     err => this.messageService.sendMessage(err.message, 'error')
                 );;
             }
