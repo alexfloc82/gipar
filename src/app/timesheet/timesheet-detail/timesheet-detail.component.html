@@ -57,6 +57,7 @@
               <th>PM</th>
               <th>Q1</th>
               <th>Q2</th>
+              <th>Total</th>
               <th></th>
             </thead>
             <tbody>
@@ -73,6 +74,7 @@
                     </select></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q1"></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q2"></td>
+                <td>{{number(form.incurridos[i].q1) + number(form.incurridos[i].q2)}}</td>
                 <td><button class="btn btn-outline-danger" (click)="deleteIncurrido(i)"><span class="fa fa-trash"></span></button></td>
               </tr>
               <tr>

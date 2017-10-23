@@ -40,6 +40,12 @@ export class UserSigninComponent implements OnInit {
     onSubmit() {
 
         if (this.form.value['password'] == this.form.value['confirm']) {
+            if(this.form.value['email'].indexOf('@airbus.com') > 1){
+                this.messageService.sendMessage("Please don't use your Airbus account. You should use Accenture or Avanade account", 'error');
+                return false;
+            }
+
+
             this.auth.signup(
                 this.form.value['email'],
                 this.form.value['password'],

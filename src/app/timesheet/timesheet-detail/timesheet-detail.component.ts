@@ -198,4 +198,7 @@ export class TimesheetDetailComponent implements OnInit {
     this.timeq2 = this.utils.getTimeRange(new Date(this.form.year,this.form.month,16),new Date(this.form.year,Number(this.form.month)+1,0));
   }
 
+  number(str:string):number{
+    return Number(str);  }
+
 }
