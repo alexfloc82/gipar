@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../core/auth/auth.service';
 import { AdminService } from '../core/utils/admin.service';
+import {Observable} from 'rxjs/Observable';
 
 import { Timesheet, User, Proposal } from '../shared/datamodel';
 
@@ -75,7 +76,17 @@ export class TimesheetComponent implements OnInit {
           });
           if (timesheet.incurridos) {
             timesheet.incurridos.forEach(incurrido => {
-              incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
+              switch (incurrido.proposal) {
+                case "VAC":
+                  incurrido.proposalObj = new Observable(observer => observer.next({ id: "Timeoff", title: "" }));
+                  break;
+                case "ADJ":
+                  incurrido.proposalObj = new Observable(observer => observer.next({ id: "Adjustment Getafe/Cadiz", title: "" }));
+                  break;
+                default:
+                  incurrido.proposalObj = this.db.object('/proposals/' + incurrido.proposal);
+                  break;
+              }
             }
             );
           }

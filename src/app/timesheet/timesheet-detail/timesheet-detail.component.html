@@ -69,7 +69,8 @@
                   </select>
                 </td>
                 <td><select class="form-control" [(ngModel)]="form.incurridos[i].pm" (change)="showDialog($event, i)">
-                    <option *ngFor="let pm of pms[i]" [value]="pm.value">{{pm.value}}</option>
+                  <option value=""></option>
+                  <option *ngFor="let pm of pms[i]" [value]="pm.value">{{pm.value}}</option>
                     <option value="--ADD--">Add PM</option>
                     </select></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q1"></td>
