@@ -31,12 +31,9 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
-        let newUser={};
-        let user = { email: email, uid: value.uid, name: name, lastname: lastname, adsuser: adsuser, role: 'Standard' };
-        newUser[value.uid]=user;
-        this.users.update(newUser).then(a => {
-          this.getProfile();
-          this.router.navigate(['/Home'])
+        this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=>{
+          this.messageService.sendMessage('Your account has not been verified yet. Please check your email, activate your account and then log in', 'error');
+          this.logout();
         })
       })
       .catch(err => this.messageService.sendMessage(err.message, 'error'))
@@ -46,7 +43,17 @@ export class AuthService {
     this.firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password)
-      .then(a => this.getProfile())
+      .then(a => {
+        if(this.firebaseAuth.auth.currentUser.emailVerified){
+          this.getProfile();
+        }
+        else{
+          this.messageService.sendMessage('Your account has not been verified.', 'error');
+          this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=> this.messageService.sendMessage('A verification email has been sent.', 'info'));
+          this.logout();
+        }
+                  
+      })
       .catch(err =>
         this.messageService.sendMessage(err.message, 'error')
       );
