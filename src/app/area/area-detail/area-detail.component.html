@@ -1,0 +1,39 @@
+<div class="container text-center pt-5" *ngIf="loader">
+  <i class="fa fa-spinner fa-4x fa-spin fa-fw" aria-hidden="true"></i>
+</div>
+<div class="container-fluid p-3" *ngIf="!loader">
+  <div class="form-row mb-3">
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="onSubmit()"><span class="fa fa-save" aria-hidden="true"></span> Save</button>
+    <button class="btn btn-outline-warning my-2 my-sm-0" (click)="goBack()"><span class="fa fa-undo" aria-hidden="true"></span> Undo</button>
+    <button class="btn btn-outline-danger my-2 my-sm-0 float-sm-right" (click)="delete()" *ngIf="area"><span class="fa fa-trash" aria-hidden="true"></span> Delete</button>
+  </div>
+  <div>
+
+    <div class="row">
+      <div class="col-12">
+
+        <label>ID</label>
+        <div class="form-group">
+          <input [(ngModel)]="form.id" type="text" class="form-control">
+        </div>
+
+        <label>Name</label>
+        <div class="form-group">
+          <input [(ngModel)]="form.name" type="text" class="form-control">
+        </div>
+
+        <label>Responsibles</label>
+        <div>
+          <p-autoComplete [(ngModel)]="form.responsibles" [suggestions]="filteredUsers" (completeMethod)="search($event)" styleClass="wid100" [multiple]="true">
+            <ng-template let-resp pTemplate="selectedItem">
+              <span style="font-size:18px">{{resp.name}} {{resp.lastname}}</span>
+          </ng-template>
+          <ng-template let-resp pTemplate="item">
+              <div>{{resp.name}} {{resp.lastname}}</div>
+            </ng-template>
+          </p-autoComplete>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

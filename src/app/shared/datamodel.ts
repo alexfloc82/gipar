@@ -125,9 +125,9 @@ export class User {
 }
 
 export class Area {
-	area: string;
-	responsible: string;
-	projectLead: string;
+	id: string;
+	name: string;
+	responsibles: User[];
 
 	constructor() { }
 }

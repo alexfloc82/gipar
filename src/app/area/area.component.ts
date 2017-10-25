@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from 'angularfire2/database';
 import {Area} from '../shared/datamodel';
 import {AreaService} from './area.service';
+import { AuthService } from '../core/auth/auth.service';
 
 @Component({
   selector: 'app-area',
@@ -16,16 +17,26 @@ export class AreaComponent implements OnInit {
   areas:Area[];
 
   constructor(private db: AngularFireDatabase,  
+    public authService: AuthService,
     private as:AreaService
   ) { 
     let today= new Date();
     this.query={area:null,month:today.getMonth(), year:today.getFullYear()};
     this.as.setYear(today.getFullYear());
     this.as.setMonth(today.getMonth());
-    db.list('/areas').subscribe(areas => {
-      this.areas = areas;
-      this.query.area = areas[0].$key;
-      this.as.setArea(areas[0].$key);});
+    this.authService.user.subscribe(user => {
+      db.list('/areas').subscribe(areas => {
+      this.areas = areas.filter(area =>{ 
+        if(area.responsibles){
+          return area.responsibles.filter(resp => resp.uid == user.uid).length > 0;
+        }
+        else{
+          return false;
+        }
+      });
+      this.query.area = this.areas[0]['$key'];
+      this.as.setArea(this.areas[0]['$key']);});
+    });
   }
 
   ngOnInit() {
