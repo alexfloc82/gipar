@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../core/auth/auth.service';
 import { AdminService } from '../core/utils/admin.service';
+import {MessageService} from '../core/message/message.service';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,8 @@ export class HomeComponent implements OnInit {
 
   constructor(public authService: AuthService,
     private router: Router,
-    private as: AdminService) {
+    private as: AdminService,
+  private messageService:MessageService) {
     this.isAdmin = this.as.isChecked;
   }
 
@@ -34,8 +36,14 @@ export class HomeComponent implements OnInit {
   }
 
   login() {
-    this.authService.login(this.email, this.password);
-    this.email = this.password = '';
+    if(this.email.indexOf('@airbus.com') > 0){
+      this.messageService.sendMessage("You should not use an airbus account. Please use Accenture or Avanade Account instead", 'error');
+      this.router.navigate(['user/emailChange']);
+    }
+    else{
+      this.authService.login(this.email, this.password);
+      this.email = this.password = '';
+    }
   }
 
   resetPassword() {
