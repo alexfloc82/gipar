@@ -59,6 +59,20 @@ export class AuthService {
       );
   }
 
+  changeEmail(email: string, password: string, newEmail: string){
+    this.firebaseAuth
+    .auth
+    .signInWithEmailAndPassword(email, password)
+    .then(a=> {
+      this.firebaseAuth.auth.currentUser.updateEmail(newEmail)
+      .then(a => {
+        this.messageService.sendMessage('Your email has been changed', 'info');
+        this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=> this.messageService.sendMessage('A verification email has been sent.', 'info'));
+        this.logout();
+      })
+    })
+  }
+
   logout() {
     this.firebaseAuth
       .auth
