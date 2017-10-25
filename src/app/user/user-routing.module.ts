@@ -6,6 +6,7 @@ import {UserDetailComponent} from './user-detail.component';
 import {UserSigninComponent} from './user-signin.component';
 import {UserForgotComponent} from './user-forgot/user-forgot.component';
 import {UserResetComponent} from './user-reset/user-reset.component';
+import { UserEmailComponent } from './user-email/user-email.component';
 
 
 const routes: Routes = [
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: ':id',    component: UserDetailComponent },
   { path: 'user/Signin',    component: UserSigninComponent },
   { path: 'user/Forgot',    component: UserForgotComponent },
-  { path: 'user/Reset',    component: UserResetComponent }
+  { path: 'user/Reset',    component: UserResetComponent },
+  { path: 'user/emailChange',    component: UserEmailComponent }
 
 ];
 

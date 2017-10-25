@@ -1,0 +1,14 @@
+<div class="container pt-5 mx-auto" style="max-width: 400px" *ngIf="!(authService.user | async)">
+  <div class="form-group">
+    <input class="form-control" type="text" [(ngModel)]="email" placeholder="email">
+  </div>
+  <div class="form-group">
+    <input class="form-control" type="password" [(ngModel)]="password" placeholder="password">
+  </div>
+  <div class="form-group">
+    <input class="form-control" type="text" [(ngModel)]="newEmail" placeholder="new email">
+  </div>
+  <div class="form-group">
+    <button class="btn btn-primary" (click)="login()" [disabled]="!email || !password">Login</button>
+  </div>
+</div>
