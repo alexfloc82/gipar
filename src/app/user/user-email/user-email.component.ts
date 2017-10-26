@@ -19,7 +19,7 @@ export class UserEmailComponent implements OnInit {
   }
 
   login() {
-    if(this.newEmail.indexOf('@airbus.com') > 1){
+    if(this.newEmail.indexOf('@airbus.com') > 0){
       this.messageService.sendMessage("Please don't use your Airbus account. You should use Accenture or Avanade account", 'error');
       return false;
   }
