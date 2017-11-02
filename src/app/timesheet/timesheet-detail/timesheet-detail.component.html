@@ -71,7 +71,7 @@
                 <td><select class="form-control" [(ngModel)]="form.incurridos[i].pm" (change)="showDialog($event, i)">
                   <option value=""></option>
                   <option *ngFor="let pm of pms[i]" [value]="pm.value">{{pm.value}}</option>
-                    <option value="--ADD--">Add PM</option>
+                    <option value="--ADD--" *ngIf="form.incurridos[i].proposal != 'VAC' && form.incurridos[i].proposal != 'ADJ'">Add PM</option>
                     </select></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q1"></td>
                 <td><input type="text" class="form-control" [(ngModel)]="form.incurridos[i].q2"></td>
