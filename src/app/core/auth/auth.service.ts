@@ -31,9 +31,15 @@ export class AuthService {
       .auth
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
-        this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=>{
-          this.messageService.sendMessage('Your account has not been verified yet. Please check your email, activate your account and then log in', 'error');
-          this.logout();
+        let newUser={};
+        let user = { email: email, uid: value.uid, name: name, lastname: lastname, adsuser: adsuser, role: 'Standard' };
+        newUser[value.uid]=user;
+        this.users.update(newUser).then(a=>
+        {
+          this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=>{
+            this.messageService.sendMessage('Your account has not been verified yet. Please check your email, activate your account and then log in', 'error');
+            this.logout();
+          })
         })
       })
       .catch(err => this.messageService.sendMessage(err.message, 'error'))
