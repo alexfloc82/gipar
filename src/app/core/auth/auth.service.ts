@@ -36,10 +36,11 @@ export class AuthService {
         newUser[value.uid]=user;
         this.users.update(newUser).then(a=>
         {
-          this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=>{
+          this.getProfile();
+          /*this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=>{
             this.messageService.sendMessage('Your account has not been verified yet. Please check your email, activate your account and then log in', 'error');
             this.logout();
-          })
+          })*/
         })
       })
       .catch(err => this.messageService.sendMessage(err.message, 'error'))
@@ -50,14 +51,14 @@ export class AuthService {
       .auth
       .signInWithEmailAndPassword(email, password)
       .then(a => {
-        if(this.firebaseAuth.auth.currentUser.emailVerified){
+       // if(this.firebaseAuth.auth.currentUser.emailVerified){
           this.getProfile();
-        }
-        else{
+        //}
+        /*else{
           this.messageService.sendMessage('Your account has not been verified.', 'error');
           this.firebaseAuth.auth.currentUser.sendEmailVerification().then(a=> this.messageService.sendMessage('A verification email has been sent.', 'info'));
           this.logout();
-        }
+        }*/
                   
       })
       .catch(err =>
