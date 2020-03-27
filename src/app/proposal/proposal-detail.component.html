@@ -76,10 +76,12 @@
               <tr *ngFor="let estimate of form.estimates;let i = index;">
                 <td><input type="text" class="form-control" [ngbTypeahead]="usearch" [(ngModel)]="selectedResources[i]" [inputFormatter]="uformatter"
                     [resultFormatter]="uformatter" (selectItem)="selectResource($event, i)" [disabled]="form.closed"></td>
-                <td><select [(ngModel)]="estimate.year" class="form-control" [disabled]="form.closed"><option value="2017">2017</option>
-                      <option value="2018">2018</option>
-                      <option value="2018">2019</option>
-                      <option value="2018">2020</option></select></td>
+                <td><select [(ngModel)]="estimate.year" class="form-control" [disabled]="form.closed">
+                      <option value="2020">2020</option>
+                      <option value="2021">2021</option>
+                      <option value="2022">2022</option>
+                      <option value="2023">2023</option>
+                    </select></td>
                 <td><input [(ngModel)]="estimate.hours" type="text" class="form-control" [disabled]="form.closed"></td>
                 <td class="text-white text-center" [class.bg-danger]="estimate.charge > estimate.hours" [class.bg-warning]="estimate.charge > estimate.hours*80/100 && estimate.charge <= estimate.hours"
                   [class.bg-success]="estimate.charge <= estimate.hours*80/100">{{estimate.charge}}</td>

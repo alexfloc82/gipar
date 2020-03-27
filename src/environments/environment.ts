@@ -6,11 +6,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyDvvL3Rfn81De5T7mkDiVBi_nnJCRVvNwk",
-    authDomain: "gipar-dev.firebaseapp.com",
-    databaseURL: "https://gipar-dev.firebaseio.com",
-    projectId: "gipar-dev",
-    storageBucket: "gipar-dev.appspot.com",
-    messagingSenderId: "167161467012"
+    apiKey: "AIzaSyCVF4Zj0-yw_GTNMvsIl5CktQ_rNfdPbQw",
+    authDomain: "gipar-ads.firebaseapp.com",
+    databaseURL: "https://gipar-ads.firebaseio.com",
+    projectId: "gipar-ads",
+    storageBucket: "",
+    messagingSenderId: "241057780571"
   }
 };

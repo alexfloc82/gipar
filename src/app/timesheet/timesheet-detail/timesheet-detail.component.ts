@@ -115,6 +115,11 @@ export class TimesheetDetailComponent implements OnInit {
 
   onSubmit() {
     this.form.month = Number(this.form.month);
+    if(this.form.incurridos.length==0)
+    {
+      this.messageService.sendMessage('Your timesheet should include time line(s)', 'error')
+    }
+    else{
     //Update object in database
     if (this.timesheet) {
       this.timesheet.update(this.form).then(a => this.messageService.sendMessage('Your timesheet has been saved successfully', 'success')).catch(
@@ -139,6 +144,7 @@ export class TimesheetDetailComponent implements OnInit {
         }
       });
 
+    }
     }
   }
 
